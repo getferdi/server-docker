@@ -3,9 +3,9 @@
 </p>
 
 # ferdi-server-docker
-Ferdi is a hard-fork of [Franz](https://github.com/meetfranz/franz), adding awesome features and removing unwanted ones. Ferdi-server is an unofficial replacement of the official Franz server for use with the Ferdi Client. 
+[Ferdi](https://github.com/getferdi/ferdi) is a hard-fork of [Franz](https://github.com/meetfranz/franz), adding awesome features and removing unwanted ones. Ferdi-server is an unofficial replacement of the official Franz server for use with the Ferdi Client. 
 
-This is a dockerized version of Ferdi-server running on Alpine Linux and Node.js (v10.16.3).
+This is a dockerized version of [Ferdi-server](https://github.com/getferdi/server) running on Alpine Linux and Node.js (v10.16.3).
 
 ## Why use a custom ferdi-server?
 A custom ferdi-server allows you to experience the full potential of the Ferdi client. It allows you to use all Premium features (e.g. Workspaces and custom URL recipes) and [adding your own recipes](#creating-and-using-custom-recipes).
@@ -78,9 +78,10 @@ services:
     restart: unless-stopped
 ```
 
-## Parameters
+## Configuration
 
-Container images are configured using parameters passed at runtime (such as those above). These parameters are separated by a colon and indicate `<external>:<internal>` respectively. For example, `-p 3333:80` would expose port `80` from inside the container to be accessible from the host's IP on port `3333` outside the container.
+Container images are configured using parameters passed at runtime (such as those above). These parameters are separated by a colon and indicate `<external>:<internal>` respectively. For example, `-p 3333:80` would expose port `80` from inside the container to be accessible from the host's IP on port `3333` outside the container. 
+After the first run, Ferdi-server's configuration is saved inside the `config.txt` file inside your persistent data directory (/config in the container).
 
 | Parameter | Function |
 | :----: | --- |
@@ -92,19 +93,13 @@ Container images are configured using parameters passed at runtime (such as thos
 | `-e DB_USER=<yourdbuser>` | for specifying the database user, default is root |
 | `-e DB_PASSWORD=<yourdbpass>` | for specifying the database password, default is empty |
 | `-e DB_DATABASE=adonis` | for specifying the database to be used, adonis |
-| `-e IS_CREATION_ENABLED=true` | for specifying whether custom recipes are enabled, default is true |
-| `-e CONNECT_WITH_FRANZ=true` | for specifying whether to connect with Franz for account porting, default is true |
+| `-e IS_CREATION_ENABLED=true` | Whether to enable the [creation of custom recipes](#creating-and-using-custom-recipes), default is true |
+| `-e CONNECT_WITH_FRANZ=true` | for specifying whether to enable connections to the Franz server, default is true |
 | `-v <path to data>:/config` | this will store persistent data on the docker host |
 
-
-1. After building this container you will need to edit the [configuration](#configuration) to suit your needs.
-
-## Configuration
-Ferdi-server's configuration is saved inside the `config.txt` file inside your persistent data directory (/config in the container). Besides the basic database and AdonisJS settings, Ferdi-server has the following custom settings:
-- `IS_CREATION_ENABLED` (`true` or `false`, default: `true`): Whether to enable the [creation of custom recipes](#creating-and-using-custom-recipes)
-- `CONNECT_WITH_FRANZ` (`true` or `false`, default: `true`): Whether to enable connections to the Franz server. By enabling this option, ferdi-server can:
-  - Show the full Franz recipe library instead of only custom recipes
-  - Import Franz accounts
+By enabling the `CONNECT_WITH_FRANZ` option, ferdi-server can:
+    - Show the full Franz recipe library instead of only custom recipes
+    - Import Franz accounts
  
 ## NGINX config block
 To access Ferdi-server from outside of your home network on a subdomain use this server block:
