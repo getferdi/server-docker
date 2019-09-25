@@ -86,7 +86,7 @@ After the first run, Ferdi-server's configuration is saved inside the `config.tx
 | Parameter | Function |
 | :----: | --- |
 | `-p <port>:80` | will map the container's port 80 to a port on the host, default is 3333 |
-| `-e NODE_ENV=development` | for specifiying Node environmentment, production or development, default is development |
+| `-e NODE_ENV=development` | for specifiying Node environment, production or development, default is development |
 | `-e DB_CONNECTION=sqlite` | for specifiying the database being used, default is sqlite |
 | `-e DB_HOST=<yourdbhost>` | for specifying the database host, default is 127.0.0.1 |
 | `-e DB_PORT=<yourdbport>` | for specifying the database port, default is 3306 |
