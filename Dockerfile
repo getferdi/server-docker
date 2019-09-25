@@ -1,10 +1,12 @@
 FROM lsiobase/alpine:3.10
 
+# version labels
+ARG BUILD_DATE
+LABEL build_version="Ferdi-server-docker Build-date:- ${BUILD_DATE}"
 LABEL maintainer="xthursdayx"
 
 ARG APP_DIR="/usr/src/app"
 ARG FERDI_RELEASE
-
 ENV NODE_VERSION=10.16.3 
 ENV NPM_VERSION=6 
 ENV YARN_VERSION=1.17.3
