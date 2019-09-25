@@ -17,6 +17,7 @@ CONNECT_WITH_FRANZ=${CONNECT_WITH_FRANZ}\\n"
 
 # Echo init finish for test runs
 if [ -n "${TEST_RUN}" ]; then
+	echo " "
 	echo '**** [services.d] done ****'
 fi
 
@@ -28,6 +29,7 @@ chown -R abc:abc /usr/src/app
 
 # install ferdi-server if necessary
 [[ -f /ferdi/ferdi.tar.gz ]] && \
+ echo " "
  echo "**** New container detected, installing Ferdi-server ****" && \
  tar xf \
  	/ferdi/ferdi.tar.gz -C \
@@ -39,6 +41,7 @@ chown -R abc:abc /usr/src/app
 
 # check for .env and copy default if needed
 [[ ! -f /config/.env ]] && \
+ echo " "
  echo "**** Generating .env file ****" && \	
  cp /defaults/.env.example /config/.env
 
@@ -55,7 +58,8 @@ npm install
 # check to see if db_user is set, if it is then run seds and if not then leave them
 if [ "${DB_USER}" ];
 	then
-	echo "**** Running config - DB set ****"
+	echo " "
+	echo "**** Running DB configuration ****"
 	sed -i "s/DB_CONNECTION=database_connection/DB_CONNECTION=${DB_CONNECTION}/g" /config/.env
 	sed -i "s/DB_HOST=database_host/DB_HOST=${DB_HOST}/g" /config/.env
 	sed -i "s/DB_PORT=database_port/DB_PORT${DB_PORT}/g" /config/.env
@@ -66,12 +70,16 @@ fi
 
 # setting the database helper
 if [ "$DB_CONNECTION" = "sqlite" ]; then
+	echo " "
     echo "**** DB Helper loaded ****"
-  else npm i $DB_CONNECTION    
-  echo "**** db helper loaded ****"
+  else npm i $DB_CONNECTION 
+  echo " "   
+  echo "**** DB Helper loaded ****"
 fi
 
 # check for the database endpoint for 30 seconds
+echo " "
+echo "**** Checking DB endpoint ****"
 END=$((SECONDS+30))
 while [ ${SECONDS} -lt ${END} ] && [ "${DB_HOST}" ];
 	do
@@ -89,6 +97,7 @@ while [ ${SECONDS} -lt ${END} ] && [ "${DB_HOST}" ];
 done
   
 # set ferdi-server status
+echo " "
 echo "**** Checking Ferdi-server settings ****"
 [[ "${IS_CREATION_ENABLED}" ]] && sed -i "s/IS_CREATION_ENABLED=account_creation/IS_CREATION_ENABLED=${IS_CREATION_ENABLED}/g" /config/.env
 
@@ -98,12 +107,14 @@ echo "**** Checking Ferdi-server settings ****"
 source .env
 
 # database migration
+echo " "
 echo "**** Run migration ****"
 adonis migration:run --force
 
 # Create APP key if needed
 if [ ! -f "/config/FERDI_APP_KEY.txt" ];
 	then
+	echo " "
 	echo "**** Generating Ferdi-server app key for first run ****"
     adonis key:generate
 	source /config/.env
@@ -111,6 +122,7 @@ if [ ! -f "/config/FERDI_APP_KEY.txt" ];
 	echo "**** App Key set to $APP_KEY you can modify the .env file to update /config/FERDI_APP_KEY.txt ****"
 elif [ -f "/config/FERDI_APP_KEY.txt" ];
 	then
+	echo " "
 	echo "**** App Key found ****"
 	APP_KEY=$(cat /config/FERDI_APP_KEY.txt)
 fi
@@ -131,5 +143,5 @@ touch /dbwait.lock
 
 # start server
 echo " "
-echo "**** Start Ferdi Server ****"
+echo "**** Starting Ferdi Server ****"
 adonis serve --dev
