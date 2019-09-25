@@ -1,0 +1,133 @@
+#!/usr/bin/with-contenv bash
+
+# Display variables for troubleshooting
+echo " "
+echo "-------------------------------------"
+echo " "
+echo -e "Variables set:\\n\
+NODE_ENV=${NODE_ENV}\\n\
+DB_CONNECTION=${DB_CONNECTION}\\n\
+DB_HOST=${DB_HOST}\\n\
+DB_PORT=${DB_PORT}\\n\
+DB_USER=${DB_USER}\\n\
+DB_PASSWORD=${DB_PASSWORD}\\n\
+DB_DATABASE=${DB_DATABASE}\\n\
+IS_CREATION_ENABLED=${IS_CREATION_ENABLED}\\n\
+CONNECT_WITH_FRANZ=${CONNECT_WITH_FRANZ}\\n"
+
+# Echo init finish for test runs
+if [ -n "${TEST_RUN}" ]; then
+	echo '**** [services.d] done ****'
+fi
+
+# create directory structure
+mkdir -p \
+	/config/ \
+	/usr/src/app && \
+chown -R abc:abc /usr/src/app
+
+# install ferdi-server if necessary
+[[ -f /ferdi/ferdi.tar.gz ]] && \
+ echo "**** New container detected, installing Ferdi-server ****" && \
+ tar xf \
+ 	/ferdi/ferdi.tar.gz -C \
+	/usr/src/app --strip-components=1 && \
+ rm -rf /ferdi && \
+ chown -R abc:abc /usr/src/app
+
+# check for .env and copy default if needed
+[[ ! -f /config/.env ]] && \
+ echo "**** Generating .env file ****" && \	
+ cp /usr/src/app/.env.example /config/.env
+
+# create symlinks
+ln -s /config/.env /usr/src/app/.env
+
+# install adonisjs cli
+cd /usr/src/app
+npm i -g @adonisjs/cli
+
+# install adonisjs dependencies
+npm install
+
+# check to see if db_user is set, if it is then run seds and if not then leave them
+if [ "${DB_USER}" ];
+	then
+	echo "**** Running config - DB set ****"
+	sed -i "s/DB_CONNECTION=database_connection/DB_CONNECTION=${DB_CONNECTION}/g" /config/.env
+	sed -i "s/DB_HOST=database_host/DB_HOST=${DB_HOST}/g" /config/.env
+	sed -i "s/DB_PORT=database_port/DB_PORT${DB_PORT}/g" /config/.env
+	sed -i "s/DB_DATABASE=database_database/DB_DATABASE=${DB_DATABASE}/g" /config/.env
+	sed -i "s/DB_USERNAME=database_user/DB_USER=${DB_USER}/g" /config/.env
+	sed -i "s/DB_PASSWORD=database_user_password/DB_PASSWORD=${DB_PASS}/g" /config/.env
+fi
+
+# setting the database helper
+if [ "$DB_CONNECTION" = "sqlite" ]; then
+    echo "**** db helper loaded ****"
+  else npm i $DB_CONNECTION    
+  echo "**** db helper loaded ****"
+fi
+
+# check for the database endpoint for 30 seconds
+END=$((SECONDS+30))
+while [ ${SECONDS} -lt ${END} ] && [ "${DB_HOST}" ];
+	do
+	/usr/bin/nc -z ${DB_HOST} ${DB_PORT} && \
+	if [ ! -z "$(/usr/bin/nc -w1 ${DB_HOST} ${DB_PORT})" ];
+		then
+		[ ! -z "${RUN}" ] && break
+		RUN="RAN"
+		# we sleep here again due to first run init on DB containers
+		[ ! -f /dbwait.lock ] && sleep 5
+	else
+		sleep 1
+	fi
+	sleep 1
+done
+  
+# set ferdi-server status
+echo "**** Checking Ferdi-server settings ****"
+[[ "${IS_CREATION_ENABLED}" ]] && sed -i "s/IS_CREATION_ENABLED=account_creation/IS_CREATION_ENABLED=${IS_CREATION_ENABLED}/g" /config/.env
+
+[[ "${CONNECT_WITH_FRANZ}" ]] && sed -i "s/CONNECT_WITH_FRANZ=${CONNECT_WITH_FRANZ}/g" /config/.env
+
+# source the .env file
+source .env
+
+# database migration
+echo "****  Run migration ****"
+adonis migration:run --force
+
+# Create APP key if needed
+if [ ! -f "/config/FERDI_APP_KEY.txt" ];
+	then
+	echo "**** Generating Ferdi-server app key for first run ****"
+    adonis key:generate
+	source /config/.env
+	echo $APP_KEY > /config/FERDI_APP_KEY.txt
+	echo "**** App Key set to $APP_KEY you can modify the .env file to update /config/FERDI_APP_KEY.txt ****"
+elif [ -f "/config/FERDI_APP_KEY.txt" ];
+	then
+	echo "**** App Key found ****"
+	APP_KEY=$(cat /config/FERDI_APP_KEY.txt)
+fi
+
+# check for the default app key or if it has been updated
+#if grep -Fxq "APP_KEY=SomeRandomString" /config/.env || \
+#! grep -Fxq "APP_KEY=${key}" /config/.env; then
+#	sed -i "s#^APP_KEY=.*#APP_KEY=${key}#" /config/.env
+#fi
+
+# set permissions
+chown -R abc:abc \
+	/config \
+	/usr/src/app
+
+# set lockfile to avoid DB waits for this specific container
+touch /dbwait.lock
+
+# start server
+echo " "
+echo "**** Start Ferdi Server ****"
+adonis serve --dev
