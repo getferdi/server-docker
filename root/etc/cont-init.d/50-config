@@ -34,10 +34,10 @@ mkdir -p /usr/src/app
     /ferdi && \
  chown -R abc:abc /usr/src/app
 
-# check for .env and copy default if needed
+# check for and create env file
 if [ -f /config/config.txt ]; then
 	cp /config/config.txt /config/.env
-elif [ ! -f /config/config.txt ]]; then
+elif [ ! -f /config/config.txt ]; then
     echo " " 
     echo "**** Generating .env file ****"	
     cp /defaults/.env.example /config/.env
@@ -49,6 +49,7 @@ ln -s /config/.env /usr/src/app/.env
 
 # install adonisjs cli
 cd /usr/src/app
+echo " " 
 npm i -g @adonisjs/cli
 
 # install adonisjs dependencies
