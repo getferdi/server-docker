@@ -120,6 +120,7 @@ if [ ! -f "/config/FERDI_APP_KEY.txt" ];
 	source /config/.env
 	echo $APP_KEY > /config/FERDI_APP_KEY.txt
 	echo "**** App Key set to $APP_KEY you can modify the .env file to update /config/FERDI_APP_KEY.txt ****"
+	sed -i "s/APP_KEY=application_key/APP_KEY=$APP_KEY/g" /config/config.txt
 elif [ -f "/config/FERDI_APP_KEY.txt" ];
 	then
 	echo " "
