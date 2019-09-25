@@ -32,7 +32,9 @@ chown -R abc:abc /usr/src/app
  tar xf \
  	/ferdi/ferdi.tar.gz -C \
 	/usr/src/app --strip-components=1 && \
- rm -rf /ferdi && \
+ rm -rf \
+	/ferdi/* \
+    /ferdi && \
  chown -R abc:abc /usr/src/app
 
 # check for .env and copy default if needed
@@ -64,7 +66,7 @@ fi
 
 # setting the database helper
 if [ "$DB_CONNECTION" = "sqlite" ]; then
-    echo "**** db helper loaded ****"
+    echo "**** DB Helper loaded ****"
   else npm i $DB_CONNECTION    
   echo "**** db helper loaded ****"
 fi
@@ -96,7 +98,7 @@ echo "**** Checking Ferdi-server settings ****"
 source .env
 
 # database migration
-echo "****  Run migration ****"
+echo "**** Run migration ****"
 adonis migration:run --force
 
 # Create APP key if needed
