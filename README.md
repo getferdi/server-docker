@@ -81,7 +81,7 @@ services:
 ## Configuration
 
 Container images are configured using parameters passed at runtime (such as those above). These parameters are separated by a colon and indicate `<external>:<internal>` respectively. For example, `-p 3333:80` would expose port `80` from inside the container to be accessible from the host's IP on port `3333` outside the container. 
-After the first run, Ferdi-server's configuration is saved inside the `config.txt` file inside your persistent data directory (/config in the container).
+After the first run, Ferdi-server's configuration is saved inside the `config.txt` file inside your persistent data directory (`/config` in the container).
 
 | Parameter | Function |
 | :----: | --- |
@@ -97,7 +97,7 @@ After the first run, Ferdi-server's configuration is saved inside the `config.tx
 | `-e CONNECT_WITH_FRANZ=true` | for specifying whether to enable connections to the Franz server, default is true |
 | `-v <path to data>:/config` | this will store persistent data on the docker host |
 
-By enabling the `CONNECT_WITH_FRANZ` option, ferdi-server can:
+By enabling the `CONNECT_WITH_FRANZ` option, Ferdi-server can:
     - Show the full Franz recipe library instead of only custom recipes
     - Import Franz accounts
  
