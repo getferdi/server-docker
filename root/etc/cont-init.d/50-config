@@ -38,7 +38,7 @@ chown -R abc:abc /usr/src/app
 # check for .env and copy default if needed
 [[ ! -f /config/.env ]] && \
  echo "**** Generating .env file ****" && \	
- cp /usr/src/app/.env.example /config/.env
+ cp /defaults/.env.example /config/.env
 
 # create symlinks
 ln -s /config/.env /usr/src/app/.env
@@ -90,7 +90,7 @@ done
 echo "**** Checking Ferdi-server settings ****"
 [[ "${IS_CREATION_ENABLED}" ]] && sed -i "s/IS_CREATION_ENABLED=account_creation/IS_CREATION_ENABLED=${IS_CREATION_ENABLED}/g" /config/.env
 
-[[ "${CONNECT_WITH_FRANZ}" ]] && sed -i "s/CONNECT_WITH_FRANZ=${CONNECT_WITH_FRANZ}/g" /config/.env
+[[ "${CONNECT_WITH_FRANZ}" ]] && sed -i "s/CONNECT_WITH_FRANZ=franz_connection/CONNECT_WITH_FRANZ=${CONNECT_WITH_FRANZ}/g" /config/.env
 
 # source the .env file
 source .env
