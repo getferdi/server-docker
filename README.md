@@ -106,8 +106,8 @@ Ferdi-server's configuration is saved inside the `config.txt` file inside your p
   - Show the full Franz recipe library instead of only custom recipes
   - Import Franz accounts
  
-## NGINX config
-To access Ferdi-server from outside of your home network on a subdomain use this 
+## NGINX config block
+To access Ferdi-server from outside of your home network on a subdomain use this server block:
 
 ```
 # Ferdi-server
