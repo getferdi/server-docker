@@ -3,37 +3,9 @@
 </p>
 
 # ferdi-server-docker
-This is a dockerized version of Ferdi server running on Alpine linux.
+Ferdi is a hard-fork of [Franz](https://github.com/meetfranz/franz), adding awesome features and removing unwanted ones. Ferdi-server is an unofficial replacement of the official Franz server for use with the Ferdi Client. 
 
-## Installation
-
-Pull the docker image:
-
-    docker pull xthursdayx/ferdi-server-docker
-
-	docker create \
-	  --name=ferdi-server \
-	  -e NODE_ENV=development \
-	  -e DB_CONNECTION=sqlite
-	  -e DB_HOST=<yourdbhost> \
-	  -e DB_PORT=<yourdbPORT> \
-	  -e DB_USER=<yourdbuser> \
-	  -e DB_PASSWORD=<yourdbpass> \
-	  -e DB_DATABASE=adonis \
-	  -e IS_CREATION_ENABLED=true \
-	  -e CONNECT_WITH_FRANZ=true \
-	  -p 6875:80 \
-	  -v <path to data>:/config \
-	  --restart unless-stopped \
-	  xthursdayx/ferdi-server-docker
-
-Run the docker image and create your container:
-
-    docker run --name='ferdi-server' -p '3333:80' -v '/mnt/cache/appdata/ferdi-server':'/usr/src/app' 'xthursdayx/ferdi-server-docker' 
-
-
-# ferdi-server
-Unofficial Franz server replacement for use with the Ferdi Client.
+This is a dockerized version of Ferdi-server running on Alpine Linux and Node.js (v10.16.3).
 
 ## Why use a custom ferdi-server?
 A custom ferdi-server allows you to experience the full potential of the Ferdi client. It allows you to use all Premium features (e.g. Workspaces and custom URL recipes) and [adding your own recipes](#creating-and-using-custom-recipes).
@@ -48,27 +20,125 @@ A custom ferdi-server allows you to experience the full potential of the Ferdi c
 - [ ] Export/import data to other ferdi-servers
 - [ ] Recipe update
 
-## Setup
+## Installation & Setup
+
+Here are some example snippets to help you get started creating a container.
+
+The docker can be run as is, with the default sqlite database, or you can modifying your ENV variables to use an external database (e.g. MYSql, MariaDB, Postgres, etc). After setting up the docker container you will need to set up a NGINX reverse proxy to access Ferdi-server outside of your home network. 
+
+### docker
+
+Pull the docker image:
+
+    docker pull xthursdayx/ferdi-server-docker
+
+To create the docker container with the proper environmental variables:
+
+	docker create \
+	  --name=ferdi-server \
+	  -e NODE_ENV=development \
+	  -e DB_CONNECTION=<database> \
+	  -e DB_HOST=<yourdbhost> \
+	  -e DB_PORT=<yourdbPORT> \
+	  -e DB_USER=<yourdbuser> \
+	  -e DB_PASSWORD=<yourdbpass> \
+	  -e DB_DATABASE=<yourdbdatabase> \
+	  -e IS_CREATION_ENABLED=true \
+	  -e CONNECT_WITH_FRANZ=true \
+	  -p <port>:80 \
+	  -v <path to data>:/config \
+	  --restart unless-stopped \
+	  xthursdayx/ferdi-server-docker
+
+### docker-compose
+
+Compatible with docker-compose v2 schemas.
+
+```
+---
+version: "2"
+services:
+  ferdi-server:
+    image: xthursday/ferdi-server-docker
+    container_name: ferdi-server
+    environment:
+	  - NODE_ENV=development
+      - DB_CONNECTION=<database>
+      - DB_HOST=<yourdbhost>
+      - DB_PORT=<yourdbPORT>
+      - DB_USER=<yourdbuser>
+	  - DB_PASSWORD=<yourdbpass>
+      - DB_DATABASE=<yourdbdatabase>
+      - IS_CREATION_ENABLED=true/false
+	  - CONNECT_WITH_FRANZ=true/flase  
+    volumes:
+      - <path to data>:/config
+    ports:
+      - <port>:80
+    restart: unless-stopped
+```
+
+## Parameters
+
+Container images are configured using parameters passed at runtime (such as those above). These parameters are separated by a colon and indicate `<external>:<internal>` respectively. For example, `-p 3333:80` would expose port `80` from inside the container to be accessible from the host's IP on port `3333` outside the container.
+
+| Parameter | Function |
+| :----: | --- |
+| `-p <port>:80` | will map the container's port 80 to a port on the host, default is 3333 |
+| `-e NODE_ENV=development` | for specifiying Node environmentment, production or development, default is development |
+| `-e DB_CONNECTION=sqlite` | for specifiying the database being used, default is sqlite |
+| `-e DB_HOST=<yourdbhost>` | for specifying the database host, default is 127.0.0.1 |
+| `-e DB_PORT=<yourdbport>` | for specifying the database port, default is 3306 |
+| `-e DB_USER=<yourdbuser>` | for specifying the database user, default is root |
+| `-e DB_PASSWORD=<yourdbpass>` | for specifying the database password, default is empty |
+| `-e DB_DATABASE=adonis` | for specifying the database to be used, adonis |
+| `-e IS_CREATION_ENABLED=true` | for specifying whether custom recipes are enabled, default is true |
+| `-e CONNECT_WITH_FRANZ=true` | for specifying whether to connect with Franz for account porting, default is true |
+| `-v <path to data>:/config` | this will store persistent data on the docker host |
+
+
 1. After building this container you will need to edit the [configuration](#configuration) to suit your needs.
 
 ## Configuration
-franz-server's configuration is saved inside the `.env` file. Besides AdonisJS's settings, ferdi-server has the following custom settings:
+Ferdi-server's configuration is saved inside the `config.txt` file inside your persistent data directory (/config in the container). Besides the basic database and AdonisJS settings, Ferdi-server has the following custom settings:
 - `IS_CREATION_ENABLED` (`true` or `false`, default: `true`): Whether to enable the [creation of custom recipes](#creating-and-using-custom-recipes)
 - `CONNECT_WITH_FRANZ` (`true` or `false`, default: `true`): Whether to enable connections to the Franz server. By enabling this option, ferdi-server can:
   - Show the full Franz recipe library instead of only custom recipes
   - Import Franz accounts
+ 
+## NGINX config
+To access Ferdi-server from outside of your home network on a subdomain use this 
+
+```
+# Ferdi-server
+server {
+        listen 443 ssl http2;
+        server_name ferdi.my.website;
+
+       	# all ssl related config moved to ssl.conf
+        include /config/nginx/ssl.conf;
+
+        location / {
+             proxy_pass              http://<Ferdi-IP>:3333;
+             proxy_set_header        X-Real-IP            $remote_addr;
+             proxy_set_header        X-Forwarded-For	  $proxy_add_x_forwarded_for;
+             proxy_set_header        Host                 $host;
+             proxy_set_header        X-Forwarded-Proto    $scheme;
+        }
+}
+```
 
 ## Importing your Franz account
-ferdi-server allows you to import your full Franz account, including all its settings.
+Ferdi-server allows you to import your full Franz account, including all its settings.
 
-To import your Franz account, open `http://[YOUR FERDI-SERVER]/import` in your browser and login using your Franz account details. ferdi-server will create a new user with the same credentials and copy your Franz settings, services and workspaces.
+To import your Franz account, open `http://[YOUR FERDI-SERVER]/import` in your browser and login using your Franz account details. Ferdi-server will create a new user with the same credentials and copy your Franz settings, services and workspaces.
 
 ## Creating and using custom recipes
-ferdi-server allows to extends the Franz recipe catalogue with custom Ferdi recipes.
+Ferdi-server allows to extends the Franz recipe catalogue with custom Ferdi recipes.
 
 For documentation on how to create a recipe, please visit [the official guide by Franz](https://github.com/meetfranz/plugins/blob/master/docs/integration.md).
 
-To add your recipe to ferdi-server, open `http://[YOUR FERDI-SERVER]/new` in your browser. You can now define the following settings:
+To add your recipe to Ferdi-server, open `http://[YOUR FERDI-SERVER]/new` in your browser. You can now define the following settings:
 - `Author`: Author who created the recipe
 - `Name`: Name for your new service. Can contain spaces and unicode characters
 - `Service ID`: Unique ID for this recipe. Does not contain spaces or special characters (e.g. `google-drive`)
@@ -78,5 +148,45 @@ To add your recipe to ferdi-server, open `http://[YOUR FERDI-SERVER]/new` in you
 ### Listing custom recipes
 Inside Ferdi, searching for `ferdi:custom` will list all your custom recipes.
 
+## Support Info
+
+* Shell access whilst the container is running: `docker exec -it ferdi-server /bin/bash`
+* To monitor the logs of the container in realtime: `docker logs -f ferdi-server`
+
+## Updating Info
+
+Below are the instructions for updating the container to get the most recent version of Ferdi-server:
+
+### Via Docker Run/Create
+* Update the image: `docker pull xthursdayx/ferdi-server-docker`
+* Stop the running container: `docker stop ferdi-server`
+* Delete the container: `docker rm ferdi-server`
+* Recreate a new container with the same docker create parameters as instructed above (if mapped correctly to a host folder, your `/config` folder and your ENV settings will be preserved)
+* Start the new container: `docker start ferdi-server`
+* You can also remove the old dangling images: `docker image prune`
+
+### Via Docker Compose
+* Update all images: `docker-compose pull`
+  * or update a single image: `docker-compose pull ferdi-server`
+* Let compose update all containers as necessary: `docker-compose up -d`
+  * or update a single container: `docker-compose up -d ferdi-server`
+* You can also remove the old dangling images: `docker image prune`
+
+## Building locally
+
+If you want to make local modifications to this image for development purposes or just to customize the logic:
+```
+git clone https://github.com/xthursdayx/ferdi-server-docker.git
+cd ferdi-server-docker
+docker build \
+  --no-cache \
+  --pull \
+  -t xthursdayx/ferdi-server-docker:latest .
+```
+
+## Versions
+
+* **25.09.19:** - Initial Release.
+
 ## License
-ferdi-server is licensed under the MIT License
+Ferdi-server-docker and ferdi-server are licensed under the MIT License.
