@@ -35,10 +35,14 @@ mkdir -p /usr/src/app
  chown -R abc:abc /usr/src/app
 
 # check for .env and copy default if needed
-[[ ! -f /config/.env ]] && \
- echo " "
- echo "**** Generating .env file ****" && \	
- cp /defaults/.env.example /config/.env
+if [ -f /config/config.txt ]; then
+	cp /config/config.txt /config/.env
+elif [ ! -f /config/config.txt ]]; then
+    echo " "
+    echo "**** Generating .env file ****"	
+    cp /defaults/.env.example /config/.env
+	cp /config/.env /config/config.txt
+fi	
 
 # create symlinks
 ln -s /config/.env /usr/src/app/.env
