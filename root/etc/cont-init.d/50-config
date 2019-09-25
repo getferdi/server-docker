@@ -22,20 +22,15 @@ if [ -n "${TEST_RUN}" ]; then
 fi
 
 # create directory structure
-mkdir -p \
-	/config/ \
-	/usr/src/app && \
-chown -R abc:abc /usr/src/app
+mkdir -p /usr/src/app
 
 # install ferdi-server if necessary
 [[ -f /ferdi/ferdi.tar.gz ]] && \
- echo " "
- echo "**** New container detected, installing Ferdi-server ****" && \
+ echo "**** Installing Ferdi-server ****" && \
  tar xf \
  	/ferdi/ferdi.tar.gz -C \
 	/usr/src/app --strip-components=1 && \
  rm -rf \
-	/ferdi/* \
     /ferdi && \
  chown -R abc:abc /usr/src/app
 
