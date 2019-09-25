@@ -93,7 +93,7 @@ After the first run, Ferdi-server's configuration is saved inside the `config.tx
 | `-e DB_USER=<yourdbuser>` | for specifying the database user, default is root |
 | `-e DB_PASSWORD=<yourdbpass>` | for specifying the database password, default is empty |
 | `-e DB_DATABASE=adonis` | for specifying the database to be used, adonis |
-| `-e IS_CREATION_ENABLED=true` | Whether to enable the [creation of custom recipes](#creating-and-using-custom-recipes), default is true |
+| `-e IS_CREATION_ENABLED=true` | for specifying whether to enable the [creation of custom recipes](#creating-and-using-custom-recipes), default is true |
 | `-e CONNECT_WITH_FRANZ=true` | for specifying whether to enable connections to the Franz server, default is true |
 | `-v <path to data>:/config` | this will store persistent data on the docker host |
 
