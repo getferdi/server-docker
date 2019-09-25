@@ -32,7 +32,7 @@ Pull the docker image:
 
     docker pull xthursdayx/ferdi-server-docker
 
-To create the docker container with the proper environmental variables:
+To create the docker container with the proper parameters:
 
 	docker create \
 	  --name=ferdi-server \
