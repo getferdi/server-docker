@@ -52,7 +52,7 @@ To create the docker container with the proper environmental variables:
 
 ### docker-compose
 
-Compatible with docker-compose v2 schemas.
+Compatible with docker-compose v2 schemas:
 
 ```
 ---
