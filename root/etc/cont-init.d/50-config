@@ -38,7 +38,7 @@ mkdir -p /usr/src/app
 if [ -f /config/config.txt ]; then
 	cp /config/config.txt /config/.env
 elif [ ! -f /config/config.txt ]]; then
-    echo " "
+    echo " " 
     echo "**** Generating .env file ****"	
     cp /defaults/.env.example /config/.env
 	cp /config/.env /config/config.txt
