@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="./app/logo.png" alt="" width="300"/>  
+    <img src="./logo.png" alt="" width="300"/>  
 </p>
 
 # ferdi-server-docker
