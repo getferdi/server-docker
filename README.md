@@ -2,12 +2,12 @@
     <img src="./logo.png" alt="" width="300"/>  
 </p>
 
-# ferdi-server-docker
+# Ferdi-server-docker
 [Ferdi](https://github.com/getferdi/ferdi) is a hard-fork of [Franz](https://github.com/meetfranz/franz), adding awesome features and removing unwanted ones. Ferdi-server is an unofficial replacement of the Franz server for use with the Ferdi Client. 
 
 This is a dockerized version of [Ferdi-server](https://github.com/getferdi/server) running on Alpine Linux and Node.js (v10.16.3).
 
-## Why use a custom ferdi-server?
+## Why use a custom Ferdi-server?
 A custom ferdi-server allows you to experience the full potential of the Ferdi client. It allows you to use all Premium features (e.g. Workspaces and custom URL recipes) and [adding your own recipes](#creating-and-using-custom-recipes).
 
 ## Features
