@@ -5,7 +5,6 @@ ARG BUILD_DATE
 LABEL build_version="Ferdi-server-docker Build-date:- ${BUILD_DATE}"
 LABEL maintainer="xthursdayx"
 
-ARG APP_DIR="/usr/src/app"
 ARG FERDI_RELEASE
 ENV NODE_VERSION=10.16.3 
 ENV NPM_VERSION=6 
@@ -63,34 +62,19 @@ RUN \
   rm "node-v$NODE_VERSION.tar.xz" SHASUMS256.txt.asc SHASUMS256.txt
   
 RUN \
-  apk add --no-cache --virtual .build-deps-yarn \
+  apk add --no-cache --virtual .build-deps-ferdi \
   curl \
   gnupg \
   tar && \
-  echo "**** installing npm and yarn ****" && \
+  echo "**** installing npm ****" && \
   npm install -g npm@${NPM_VERSION} && \
   find /usr/lib/node_modules/npm -name test -o -name .bin -type d | xargs rm -rf && \
-  for key in \
-      6A010C5166006599AA17F08146C2130DFD2497F5 \
-    ; do \
-      gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" || \
-      gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys "$key" || \
-      gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys "$key" ; \
-    done && \
-  curl -fsSLO --compressed "https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz" && \
-  curl -fsSLO --compressed "https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz.asc" && \
-  gpg --batch --verify yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz && \
-  mkdir -p /usr/local/share/yarn && \
-  tar -xzf yarn-v$YARN_VERSION.tar.gz -C /usr/local/share/yarn --strip 1 && \
-  ln -s /usr/local/share/yarn/bin/yarn /usr/local/bin/ && \
-  ln -s /usr/local/share/yarn/bin/yarnpkg /usr/local/bin/ && \
   echo "**** install ferdi server ****" && \
   mkdir -p /ferdi && \
   curl -o /ferdi/ferdi.tar.gz -L "https://github.com/getferdi/server/archive/master.tar.gz" && \
   echo "**** cleanup ****" && \
-  apk del .build-deps-yarn && \
+  apk del .build-deps-ferdi && \
   rm -rf \
-   yarn-v${YARN_VERSION}.tar.gz* \
    ${RM_DIRS} \
    /node-${NODE_VERSION}* \
    /SHASUMS256.txt \
