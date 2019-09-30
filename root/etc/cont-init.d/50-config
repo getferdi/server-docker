@@ -55,19 +55,10 @@ echo " "
 echo "**** Running DB configuration ****"
 sed -i "s/DB_CONNECTION=database_connection/DB_CONNECTION=${DB_CONNECTION}/g" /config/.env
 sed -i "s/DB_HOST=database_host/DB_HOST=${DB_HOST}/g" /config/.env
-sed -i "s/DB_PORT=database_port/DB_PORT${DB_PORT}/g" .env
+sed -i "s/DB_PORT=database_port/DB_PORT${DB_PORT}/g" /config/.env
 sed -i "s/DB_DATABASE=database_database/DB_DATABASE=${DB_DATABASE}/g" /config/.env
 sed -i "s/DB_USERNAME=database_user/DB_USER=${DB_USER}/g" /config/.env
 sed -i "s/DB_PASSWORD=database_user_password/DB_PASSWORD=${DB_PASS}/g" /config/.env
-
-# setting the database helper
-if [ "${DB_CONNECTION}" = "sqlite" ]; then
-	echo " "
-    echo "**** DB Helper loaded ****"
-  else npm i ${DB_CONNECTION}
-  echo " "   
-  echo "**** DB Helper loaded ****"
-fi
 
 # update .env
 cp /config/.env /config/config.txt
@@ -80,6 +71,14 @@ npm i -g @adonisjs/cli
 
 # install adonisjs dependencies
 npm install
+
+# setting the database helper
+if [ "${DB_CONNECTION}" = "sqlite" ]; then
+	echo " "
+    echo "**** DB Helper loaded ****"
+  else npm i ${DB_CONNECTION} 
+  echo "**** DB Helper loaded ****"
+fi
 
 # check for the database endpoint for 30 seconds
 echo " "
