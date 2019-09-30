@@ -75,7 +75,7 @@ npm install
 # setting the database helper
 if [ "${DB_CONNECTION}" = "sqlite" ]; then
 	echo " "
-    echo "**** DB Helper loaded ****"
+    echo "**** DB helper loaded ****"
   else npm i ${DB_CONNECTION} 
   echo " "
   echo "**** DB Helper loaded ****"
@@ -105,7 +105,7 @@ source .env
 
 # database migration
 echo " "
-echo "**** Run migration ****"
+echo "**** Run DB migration ****"
 adonis migration:run --force
 
 # Create APP key if needed
@@ -135,5 +135,5 @@ touch /dbwait.lock
 
 # start server
 echo " "
-echo "**** Starting Ferdi Server ****"
+echo "**** Starting Ferdi-server ****"
 adonis serve --dev
