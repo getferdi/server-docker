@@ -55,7 +55,7 @@ echo " "
 echo "**** Running ENV configuration ****"
 sed -i "s/DB_CONNECTION=/DB_CONNECTION=${DB_CONNECTION}/g" /config/.env
 sed -i "s/DB_HOST=/DB_HOST=${DB_HOST}/g" /config/.env
-sed -i "s/DB_PORT=/DB_PORT${DB_PORT}/g" /config/.env
+sed -i "s/DB_PORT=/DB_PORT=${DB_PORT}/g" /config/.env
 sed -i "s/DB_DATABASE=/DB_DATABASE=${DB_DATABASE}/g" /config/.env
 sed -i "s/DB_USER=/DB_USER=${DB_USER}/g" /config/.env
 sed -i "s/DB_PASSWORD=/DB_PASSWORD=${DB_PASSWORD}/g" /config/.env
