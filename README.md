@@ -110,7 +110,7 @@ To use a different database than the default SQLite enter the driver code below 
 | MariaDB | mysql |
 | MySQL | mysql |
 | PostgreSQL | pg |
-| SQLite3 | sqlite3 |
+| SQLite3 | sqlite |
  
 ## NGINX config block
 To access Ferdi-server from outside of your home network on a subdomain use this server block:
