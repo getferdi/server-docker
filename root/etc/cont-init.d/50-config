@@ -46,19 +46,19 @@ fi
 # set ferdi-server status
 echo " "
 echo "**** Checking Ferdi-server settings ****"
-[[ "${IS_CREATION_ENABLED}" ]] && sed -i "s/IS_CREATION_ENABLED=account_creation/IS_CREATION_ENABLED=${IS_CREATION_ENABLED}/g" /config/.env
+[[ "${IS_CREATION_ENABLED}" ]] && sed -i "s/IS_CREATION_ENABLED=accountcreation/IS_CREATION_ENABLED=${IS_CREATION_ENABLED}/g" /config/.env
 
-[[ "${CONNECT_WITH_FRANZ}" ]] && sed -i "s/CONNECT_WITH_FRANZ=franz_connection/CONNECT_WITH_FRANZ=${CONNECT_WITH_FRANZ}/g" /config/.env
+[[ "${CONNECT_WITH_FRANZ}" ]] && sed -i "s/CONNECT_WITH_FRANZ=franzconnection/CONNECT_WITH_FRANZ=${CONNECT_WITH_FRANZ}/g" /config/.env
 
-# check DB_settings
+# check ENV settings
 echo " "
-echo "**** Running DB configuration ****"
-sed -i "s/DB_CONNECTION=database_connection/DB_CONNECTION=${DB_CONNECTION}/g" /config/.env
-sed -i "s/DB_HOST=database_host/DB_HOST=${DB_HOST}/g" /config/.env
-sed -i "s/DB_PORT=database_port/DB_PORT${DB_PORT}/g" /config/.env
-sed -i "s/DB_DATABASE=database_database/DB_DATABASE=${DB_DATABASE}/g" /config/.env
-sed -i "s/DB_USERNAME=database_user/DB_USER=${DB_USER}/g" /config/.env
-sed -i "s/DB_PASSWORD=database_user_password/DB_PASSWORD=${DB_PASS}/g" /config/.env
+echo "**** Running ENV configuration ****"
+sed -i "s/DB_CONNECTION=/DB_CONNECTION=${DB_CONNECTION}/g" /config/.env
+sed -i "s/DB_HOST=/DB_HOST=${DB_HOST}/g" /config/.env
+sed -i "s/DB_PORT=/DB_PORT${DB_PORT}/g" /config/.env
+sed -i "s/DB_DATABASE=/DB_DATABASE=${DB_DATABASE}/g" /config/.env
+sed -i "s/DB_USER=/DB_USER=${DB_USER}/g" /config/.env
+sed -i "s/DB_PASSWORD=/DB_PASSWORD=${DB_PASSWORD}/g" /config/.env
 
 # update .env
 cp /config/.env /config/config.txt
@@ -77,6 +77,7 @@ if [ "${DB_CONNECTION}" = "sqlite" ]; then
 	echo " "
     echo "**** DB Helper loaded ****"
   else npm i ${DB_CONNECTION} 
+  echo " "
   echo "**** DB Helper loaded ****"
 fi
 
