@@ -134,7 +134,7 @@ chown -R abc:abc \
 touch /dbwait.lock
 
 # update config
-cp /config/env /config/config.txt
+cp /config/.env /config/config.txt
 
 # start server
 echo " "
