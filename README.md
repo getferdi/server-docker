@@ -158,7 +158,7 @@ Inside Ferdi, searching for `ferdi:custom` will list all your custom recipes.
 
 ## Support Info
 
-* Shell access whilst the container is running: `docker exec -it ferdi-server /bin/bash`
+* Shell access while the container is running: `docker exec -it ferdi-server /bin/bash`
 * To monitor the logs of the container in realtime: `docker logs -f ferdi-server`
 
 ## Updating Info
