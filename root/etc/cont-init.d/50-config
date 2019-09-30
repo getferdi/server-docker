@@ -41,10 +41,36 @@ elif [ ! -f /config/config.txt ]; then
     echo " " 
     echo "**** Generating .env file ****"	
     cp /defaults/.env.example /config/.env
-	cp /config/.env /config/config.txt
 fi	
 
-# create symlinks
+# set ferdi-server status
+echo " "
+echo "**** Checking Ferdi-server settings ****"
+[[ "${IS_CREATION_ENABLED}" ]] && sed -i "s/IS_CREATION_ENABLED=account_creation/IS_CREATION_ENABLED=${IS_CREATION_ENABLED}/g" /config/.env
+
+[[ "${CONNECT_WITH_FRANZ}" ]] && sed -i "s/CONNECT_WITH_FRANZ=franz_connection/CONNECT_WITH_FRANZ=${CONNECT_WITH_FRANZ}/g" /config/.env
+
+# check DB_settings
+echo " "
+echo "**** Running DB configuration ****"
+sed -i "s/DB_CONNECTION=database_connection/DB_CONNECTION=${DB_CONNECTION}/g" /config/.env
+sed -i "s/DB_HOST=database_host/DB_HOST=${DB_HOST}/g" /config/.env
+sed -i "s/DB_PORT=database_port/DB_PORT${DB_PORT}/g" .env
+sed -i "s/DB_DATABASE=database_database/DB_DATABASE=${DB_DATABASE}/g" /config/.env
+sed -i "s/DB_USERNAME=database_user/DB_USER=${DB_USER}/g" /config/.env
+sed -i "s/DB_PASSWORD=database_user_password/DB_PASSWORD=${DB_PASS}/g" /config/.env
+
+# setting the database helper
+if [ "${DB_CONNECTION}" = "sqlite" ]; then
+	echo " "
+    echo "**** DB Helper loaded ****"
+  else npm i ${DB_CONNECTION}
+  echo " "   
+  echo "**** DB Helper loaded ****"
+fi
+
+# update .env
+cp /config/.env /config/config.txt
 ln -s /config/.env /usr/src/app/.env
 
 # install adonisjs cli
@@ -54,25 +80,6 @@ npm i -g @adonisjs/cli
 
 # install adonisjs dependencies
 npm install
-
-# check DB_settings
-echo " "
-echo "**** Running DB configuration ****"
-sed -i "s/DB_CONNECTION=database_connection/DB_CONNECTION=${DB_CONNECTION}/g" /config/.env
-sed -i "s/DB_HOST=database_host/DB_HOST=${DB_HOST}/g" /config/.env
-sed -i "s/DB_PORT=database_port/DB_PORT${DB_PORT}/g" /config/.env
-sed -i "s/DB_DATABASE=database_database/DB_DATABASE=${DB_DATABASE}/g" /config/.env
-sed -i "s/DB_USERNAME=database_user/DB_USER=${DB_USER}/g" /config/.env
-sed -i "s/DB_PASSWORD=database_user_password/DB_PASSWORD=${DB_PASS}/g" /config/.env
-
-# setting the database helper
-if [ "$DB_CONNECTION" = "sqlite" ]; then
-	echo " "
-    echo "**** DB Helper loaded ****"
-  else npm i $DB_CONNECTION 
-  echo " "   
-  echo "**** DB Helper loaded ****"
-fi
 
 # check for the database endpoint for 30 seconds
 echo " "
@@ -92,13 +99,6 @@ while [ ${SECONDS} -lt ${END} ] && [ "${DB_HOST}" ];
 	fi
 	sleep 1
 done
-  
-# set ferdi-server status
-echo " "
-echo "**** Checking Ferdi-server settings ****"
-[[ "${IS_CREATION_ENABLED}" ]] && sed -i "s/IS_CREATION_ENABLED=account_creation/IS_CREATION_ENABLED=${IS_CREATION_ENABLED}/g" /config/.env
-
-[[ "${CONNECT_WITH_FRANZ}" ]] && sed -i "s/CONNECT_WITH_FRANZ=franz_connection/CONNECT_WITH_FRANZ=${CONNECT_WITH_FRANZ}/g" /config/.env
 
 # source the .env file
 source .env
@@ -114,7 +114,7 @@ if [ ! -f "/config/FERDI_APP_KEY.txt" ];
 	echo " "
 	echo "**** Generating Ferdi-server app key for first run ****"
     adonis key:generate
-	source /config/.env
+	source .env
 	echo $APP_KEY > /config/FERDI_APP_KEY.txt
 	echo "**** App Key set to $APP_KEY you can modify the config.txt file to update your key ****"
 	sed -i "s/APP_KEY=/APP_KEY=$APP_KEY/g" /config/config.txt
@@ -132,9 +132,6 @@ chown -R abc:abc \
 
 # set lockfile to avoid DB waits for this specific container
 touch /dbwait.lock
-
-# update config
-cp /config/.env /config/config.txt
 
 # start server
 echo " "
