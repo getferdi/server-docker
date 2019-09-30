@@ -100,6 +100,19 @@ After the first run, Ferdi-server's configuration is saved inside the `config.tx
 By enabling the `CONNECT_WITH_FRANZ` option, Ferdi-server can:
     - Show the full Franz recipe library instead of only custom recipes
     - Import Franz accounts
+
+## Supported databases and drivers
+
+To use a different database than the default SQLite enter the driver code below in your ENV configuration. 
+
+| Database | Driver |
+| :----: | --- |
+| MariaDB | mysql or mysql2 |
+| MSSQL | mssql |
+| MySQL | mysql or mysql2 |
+| Oracle | oracledb |
+| PostgreSQL | pg |
+| SQLite3 | sqlite3 |
  
 ## NGINX config block
 To access Ferdi-server from outside of your home network on a subdomain use this server block:
