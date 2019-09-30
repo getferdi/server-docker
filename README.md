@@ -107,10 +107,8 @@ To use a different database than the default SQLite enter the driver code below 
 
 | Database | Driver |
 | :----: | --- |
-| MariaDB | mysql or mysql2 |
-| MSSQL | mssql |
-| MySQL | mysql or mysql2 |
-| Oracle | oracledb |
+| MariaDB | mysql |
+| MySQL | mysql |
 | PostgreSQL | pg |
 | SQLite3 | sqlite3 |
  
