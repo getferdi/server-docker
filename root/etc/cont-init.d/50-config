@@ -32,41 +32,44 @@ mkdir -p /usr/src/app
 	/usr/src/app --strip-components=1 && \
  rm -rf \
     /ferdi && \
- chown -R abc:abc /usr/src/app
-
-# check for and create env file
-if [ -f /config/config.txt ]; then
-	cp /config/config.txt /config/.env
-elif [ ! -f /config/config.txt ]; then
-    echo " " 
-    echo "**** Generating .env file ****"	
-    cp /defaults/.env.example /config/.env
-fi	
+ chown -R abc:abc /usr/src/app	
 
 # set ferdi-server status
 echo " "
 echo "**** Checking Ferdi-server settings ****"
-[[ "${IS_CREATION_ENABLED}" ]] && sed -i "s/IS_CREATION_ENABLED=accountcreation/IS_CREATION_ENABLED=${IS_CREATION_ENABLED}/g" /config/.env
-
-[[ "${CONNECT_WITH_FRANZ}" ]] && sed -i "s/CONNECT_WITH_FRANZ=franzconnection/CONNECT_WITH_FRANZ=${CONNECT_WITH_FRANZ}/g" /config/.env
-
-# check ENV settings
-echo " "
-echo "**** Running ENV configuration ****"
-sed -i "s/DB_CONNECTION=/DB_CONNECTION=${DB_CONNECTION}/g" /config/.env
-sed -i "s/DB_HOST=/DB_HOST=${DB_HOST}/g" /config/.env
-sed -i "s/DB_PORT=/DB_PORT=${DB_PORT}/g" /config/.env
-sed -i "s/DB_DATABASE=/DB_DATABASE=${DB_DATABASE}/g" /config/.env
-sed -i "s/DB_USER=/DB_USER=${DB_USER}/g" /config/.env
-sed -i "s/DB_PASSWORD=/DB_PASSWORD=${DB_PASSWORD}/g" /config/.env
+if [ -f /config/config.txt ]; then
+    sed -i "s/NODE_ENV=.*/NODE_ENV=${NODE_ENV}/g" /config/config.txt
+    sed -i "s/IS_CREATION_ENABLED=.*/IS_CREATION_ENABLED=${IS_CREATION_ENABLED}/g" /config/config.txt
+    sed -i "s/CONNECT_WITH_FRANZ=.*/CONNECT_WITH_FRANZ=${CONNECT_WITH_FRANZ}/g" /config/config.txt
+    sed -i "s/DB_CONNECTION=.*/DB_CONNECTION=${DB_CONNECTION}/g" /config/config.txt
+    sed -i "s/DB_HOST=.*/DB_HOST=${DB_HOST}/g" /config/config.txt
+    sed -i "s/DB_PORT=.*/DB_PORT=${DB_PORT}/g" /config/config.txt
+    sed -i "s/DB_DATABASE=.*/DB_DATABASE=${DB_DATABASE}/g" /config/config.txt
+    sed -i "s/DB_USER=.*/DB_USER=${DB_USER}/g" /config/config.txt
+    sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${DB_PASSWORD}/g" /config/config.txt
+	rm /config/.env
+    cp /config/config.txt /config/.env
+elif [ ! -f /config/config.txt ]; then
+    echo " " 
+    echo "**** Generating .env file ****"	
+    cp /defaults/.env.example /config/.env
+	sed -i "s/NODE_ENV=.*/NODE_ENV=${NODE_ENV}/g" /config/.env
+	sed -i "s/IS_CREATION_ENABLED=.*/IS_CREATION_ENABLED=${IS_CREATION_ENABLED}/g" /config/.env
+	sed -i "s/CONNECT_WITH_FRANZ=.*/CONNECT_WITH_FRANZ=${CONNECT_WITH_FRANZ}/g" /config/.env
+	sed -i "s/DB_CONNECTION=.*/DB_CONNECTION=${DB_CONNECTION}/g" /config/.env
+	sed -i "s/DB_HOST=.*/DB_HOST=${DB_HOST}/g" /config/.env
+	sed -i "s/DB_PORT=.*/DB_PORT=${DB_PORT}/g" /config/.env
+	sed -i "s/DB_DATABASE=.*/DB_DATABASE=${DB_DATABASE}/g" /config/.env
+	sed -i "s/DB_USER=.*/DB_USER=${DB_USER}/g" /config/.env
+	sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${DB_PASSWORD}/g" /config/.env
+	cp /config/.env /config/config.txt
+fi
 
 # update .env
 if [ -f /usr/src/app/.env ]; then
 	rm /usr/src/.env
-	cp /config/.env /config/config.txt
 	ln -s /config/.env /usr/src/app/.env
 elif [ ! -f /usr/src/app/.env ]; then
-	cp /config/.env /config/config.txt
 	ln -s /config/.env /usr/src/app/.env
 fi
 
@@ -124,13 +127,15 @@ if [ ! -f "/config/FERDI_APP_KEY.txt" ];
     adonis key:generate
 	source .env
 	echo $APP_KEY > /config/FERDI_APP_KEY.txt
-	echo "**** App Key set to $APP_KEY you can modify the config.txt file to update your key ****"
+	echo "**** App Key set to $APP_KEY you can modify FERDI_APP_KEY.txt to update your key ****"
 	sed -i "s/APP_KEY=/APP_KEY=$APP_KEY/g" /config/config.txt
 elif [ -f "/config/FERDI_APP_KEY.txt" ];
 	then
 	echo " "
 	echo "**** App Key found ****"
 	APP_KEY=$(cat /config/FERDI_APP_KEY.txt)
+	sed -i "s/APP_KEY=.*/APP_KEY=$APP_KEY/g" /config/config.txt
+	echo "**** App Key set to $APP_KEY you can modify FERDI_APP_KEY.txt to update your key ****"
 fi
 
 # set permissions

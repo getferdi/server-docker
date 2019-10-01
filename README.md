@@ -74,6 +74,7 @@ services:
 	  - CONNECT_WITH_FRANZ=true/flase  
     volumes:
       - <path to data>:/config
+      - <path to database>:/usr/src/app/database
     ports:
       - <port>:80
     restart: unless-stopped
@@ -92,12 +93,12 @@ After the first run, Ferdi-server's configuration is saved inside the `config.tx
 | `-e DB_HOST=<yourdbhost>` | for specifying the database host, default is 127.0.0.1 |
 | `-e DB_PORT=<yourdbport>` | for specifying the database port, default is 3306 |
 | `-e DB_USER=<yourdbuser>` | for specifying the database user, default is root |
-| `-e DB_PASSWORD=<yourdbpass>` | for specifying the database password, default is empty |
+| `-e DB_PASSWORD=<yourdbpass>` | for specifying the database password, default is password |
 | `-e DB_DATABASE=adonis` | for specifying the database to be used, adonis |
 | `-e IS_CREATION_ENABLED=true` | for specifying whether to enable the [creation of custom recipes](#creating-and-using-custom-recipes), default is true |
 | `-e CONNECT_WITH_FRANZ=true` | for specifying whether to enable connections to the Franz server, default is true |
 | `-v <path to data>:/config` | this will store persistent ENV  data on the docker host |
-| `-v <path to data>:/usr/src/app/database` | this will strore Ferdi-server's database on the docker host for persistence |
+| `-v <path to database>:/usr/src/app/database` | this will strore Ferdi-server's database on the docker host for persistence |
 	
 
 By enabling the `CONNECT_WITH_FRANZ` option, Ferdi-server can:
