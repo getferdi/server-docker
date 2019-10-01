@@ -30,7 +30,7 @@ The docker can be run as is, with the default sqlite database, or you can modify
 
 Pull the docker image:
 
-    docker pull xthursdayx/ferdi-server-docker
+    docker pull getferdi/ferdi-server
 
 To create the docker container with the proper parameters:
 
@@ -49,7 +49,7 @@ To create the docker container with the proper parameters:
 	  -v <path to data>:/config \
 	  -v <path to database>:/usr/src/app/database \
 	  --restart unless-stopped \
-	  xthursdayx/ferdi-server-docker
+	  getferdi/ferdi-server
 
 ### docker-compose
 
@@ -60,7 +60,7 @@ Compatible with docker-compose v2 schemas:
 version: "2"
 services:
   ferdi-server:
-    image: xthursday/ferdi-server-docker
+    image: getferdi/ferdi-server
     container_name: ferdi-server
     environment:
       - NODE_ENV=development
@@ -168,7 +168,7 @@ Inside Ferdi, searching for `ferdi:custom` will list all your custom recipes.
 Below are the instructions for updating the container to get the most recent version of Ferdi-server:
 
 ### Via Docker Run/Create
-* Update the image: `docker pull xthursdayx/ferdi-server-docker`
+* Update the image: `docker pull getferdi/ferdi-server`
 * Stop the running container: `docker stop ferdi-server`
 * Delete the container: `docker rm ferdi-server`
 * Recreate a new container with the same docker create parameters as instructed above (if mapped correctly to a host folder, your `/config` folder and your ENV settings will be preserved)
@@ -186,12 +186,12 @@ Below are the instructions for updating the container to get the most recent ver
 
 If you want to make local modifications to this image for development purposes or just to customize the logic:
 ```
-git clone https://github.com/xthursdayx/ferdi-server-docker.git
-cd ferdi-server-docker
+git clone https://github.com/getferdi/server-docker.git
+cd server-docker
 docker build \
   --no-cache \
   --pull \
-  -t xthursdayx/ferdi-server-docker:latest .
+  -t getferdi/server-docker:latest .
 ```
 
 ## Versions
