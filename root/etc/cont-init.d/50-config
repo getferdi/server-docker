@@ -61,8 +61,14 @@ sed -i "s/DB_USER=/DB_USER=${DB_USER}/g" /config/.env
 sed -i "s/DB_PASSWORD=/DB_PASSWORD=${DB_PASSWORD}/g" /config/.env
 
 # update .env
-cp /config/.env /config/config.txt
-ln -s /config/.env /usr/src/app/.env
+if [ -f /usr/src/app/.env ]; then
+	rm /usr/src/.env
+	cp /config/.env /config/config.txt
+	ln -s /config/.env /usr/src/app/.env
+elif [ ! -f /usr/src/app/.env ]; then
+	cp /config/.env /config/config.txt
+	ln -s /config/.env /usr/src/app/.env
+fi
 
 # install adonisjs cli
 cd /usr/src/app

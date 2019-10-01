@@ -96,7 +96,7 @@ After the first run, Ferdi-server's configuration is saved inside the `config.tx
 | `-e DB_DATABASE=adonis` | for specifying the database to be used, adonis |
 | `-e IS_CREATION_ENABLED=true` | for specifying whether to enable the [creation of custom recipes](#creating-and-using-custom-recipes), default is true |
 | `-e CONNECT_WITH_FRANZ=true` | for specifying whether to enable connections to the Franz server, default is true |
-| `-v <path to data>:/config` | this will store persistent ENV data on the docker host |
+| `-v <path to data>:/config` | this will store persistent ENV  data on the docker host |
 | `-v <path to data>:/usr/src/app/database` | this will strore Ferdi-server's database on the docker host for persistence |
 	
 
@@ -106,7 +106,7 @@ By enabling the `CONNECT_WITH_FRANZ` option, Ferdi-server can:
 
 ## Supported databases and drivers
 
-To use a different database than the default SQLite enter the driver code below in your ENV configuration. 
+To use a different database than the default, SQLite, enter the driver code below in your ENV configuration. 
 
 | Database | Driver |
 | :----: | --- |
