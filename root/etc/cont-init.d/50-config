@@ -71,6 +71,8 @@ elif [ ! -f /usr/src/app/.env ]; then
 fi
 
 # install adonisjs cli
+echo " "
+echo "**** Installing AdonisJS and deps ****"
 cd /usr/src/app
 echo " " 
 npm i -g @adonisjs/cli
