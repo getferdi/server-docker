@@ -63,15 +63,15 @@ services:
     image: xthursday/ferdi-server-docker
     container_name: ferdi-server
     environment:
-	  - NODE_ENV=development
+      - NODE_ENV=development
       - DB_CONNECTION=<database>
       - DB_HOST=<yourdbhost>
       - DB_PORT=<yourdbPORT>
       - DB_USER=<yourdbuser>
-	  - DB_PASSWORD=<yourdbpass>
+      - DB_PASSWORD=<yourdbpass>
       - DB_DATABASE=<yourdbdatabase>
       - IS_CREATION_ENABLED=true/false
-	  - CONNECT_WITH_FRANZ=true/flase  
+      - CONNECT_WITH_FRANZ=true/flase  
     volumes:
       - <path to data>:/config
       - <path to database>:/usr/src/app/database
