@@ -96,7 +96,7 @@ fi
 echo " "
 echo "**** Checking DB endpoint ****"
 END=$((SECONDS+30))
-while [ ${SECONDS} -lt ${END} ] && [ "${DB_HOST}" ];
+while [ ${SECONDS} -lt ${END} ] && [ "${DB_HOST} ${DB_PORT}" ];
 	do
 	/usr/bin/nc -z ${DB_HOST} ${DB_PORT} && \
 	if [ ! -z "$(/usr/bin/nc -w1 ${DB_HOST} ${DB_PORT})" ];
