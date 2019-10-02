@@ -93,4 +93,4 @@ COPY root/ /
 
 # ports and volumes
 EXPOSE 80 443
-VOLUME /usr/src/app/database /config
+VOLUME /usr/src/app/database /usr/src/app/recipes /config

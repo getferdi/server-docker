@@ -30,7 +30,7 @@ The docker can be run as is, with the default sqlite database, or you can modify
 
 Pull the docker image:
 
-    docker pull getferdi/ferdi-server
+    docker pull xthursdayx/ferdi-server-docker
 
 To create the docker container with the proper parameters:
 
@@ -48,8 +48,9 @@ To create the docker container with the proper parameters:
 	  -p <port>:80 \
 	  -v <path to data>:/config \
 	  -v <path to database>:/usr/src/app/database \
+	  -v <path to recipes>:/usr/src/app/recipes \
 	  --restart unless-stopped \
-	  getferdi/ferdi-server
+	  xthursdayx/ferdi-server-docker
 
 ### docker-compose
 
@@ -60,7 +61,7 @@ Compatible with docker-compose v2 schemas:
 version: "2"
 services:
   ferdi-server:
-    image: getferdi/ferdi-server
+    image: xthursday/ferdi-server-docker
     container_name: ferdi-server
     environment:
       - NODE_ENV=development
@@ -71,10 +72,11 @@ services:
       - DB_PASSWORD=<yourdbpass>
       - DB_DATABASE=<yourdbdatabase>
       - IS_CREATION_ENABLED=true/false
-      - CONNECT_WITH_FRANZ=true/flase  
+      - CONNECT_WITH_FRANZ=true/false
     volumes:
       - <path to data>:/config
       - <path to database>:/usr/src/app/database
+      - <path to recipes>:/usr/src/app/recipes
     ports:
       - <port>:80
     restart: unless-stopped
@@ -99,6 +101,7 @@ After the first run, Ferdi-server's configuration is saved inside the `config.tx
 | `-e CONNECT_WITH_FRANZ=true` | for specifying whether to enable connections to the Franz server, default is true |
 | `-v <path to data>:/config` | this will store persistent ENV  data on the docker host |
 | `-v <path to database>:/usr/src/app/database` | this will strore Ferdi-server's database on the docker host for persistence |
+| `-v <path to recipes>:/usr/src/app/recipes` | this will strore Ferdi-server's recipes on the docker host for persistence |
 	
 
 By enabling the `CONNECT_WITH_FRANZ` option, Ferdi-server can:
