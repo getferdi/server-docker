@@ -61,7 +61,7 @@ Compatible with docker-compose v2 schemas:
 version: "2"
 services:
   ferdi-server:
-    image: getferdi/ferdi-server-docker
+    image: getferdi/server-docker
     container_name: ferdi-server
     environment:
       - NODE_ENV=development
