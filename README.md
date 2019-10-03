@@ -30,7 +30,7 @@ The docker can be run as is, with the default sqlite database, or you can modify
 
 Pull the docker image:
 
-    docker pull xthursdayx/ferdi-server-docker
+    docker pull getferdi/ferdi-server-docker
 
 To create the docker container with the proper parameters:
 
@@ -50,7 +50,7 @@ To create the docker container with the proper parameters:
 	  -v <path to database>:/usr/src/app/database \
 	  -v <path to recipes>:/usr/src/app/recipes \
 	  --restart unless-stopped \
-	  xthursdayx/ferdi-server-docker
+	  getferdi/server-docker
 
 ### docker-compose
 
@@ -61,7 +61,7 @@ Compatible with docker-compose v2 schemas:
 version: "2"
 services:
   ferdi-server:
-    image: xthursday/ferdi-server-docker
+    image: getferdi/ferdi-server-docker
     container_name: ferdi-server
     environment:
       - NODE_ENV=development
