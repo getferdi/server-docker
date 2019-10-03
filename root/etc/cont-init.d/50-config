@@ -83,6 +83,11 @@ npm i -g @adonisjs/cli
 # install adonisjs dependencies
 npm install
 
+# make custom recipe dir
+if [ ! -f /usr/src/app/recipes/dev ]; then
+mkdir -p /usr/src/app/recipes/dev
+fi
+
 # setting the database helper
 if [ "${DB_CONNECTION}" = "sqlite" ]; then
 	echo " "
