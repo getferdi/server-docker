@@ -38,30 +38,30 @@ mkdir -p /usr/src/app
 echo " "
 echo "**** Checking Ferdi-server settings ****"
 if [ -f /config/config.txt ]; then
-    sed -i "s/NODE_ENV=.*/NODE_ENV=${NODE_ENV}/g" /config/config.txt
-    sed -i "s/IS_CREATION_ENABLED=.*/IS_CREATION_ENABLED=${IS_CREATION_ENABLED}/g" /config/config.txt
-    sed -i "s/CONNECT_WITH_FRANZ=.*/CONNECT_WITH_FRANZ=${CONNECT_WITH_FRANZ}/g" /config/config.txt
-    sed -i "s/DB_CONNECTION=.*/DB_CONNECTION=${DB_CONNECTION}/g" /config/config.txt
-    sed -i "s/DB_HOST=.*/DB_HOST=${DB_HOST}/g" /config/config.txt
-    sed -i "s/DB_PORT=.*/DB_PORT=${DB_PORT}/g" /config/config.txt
-    sed -i "s/DB_DATABASE=.*/DB_DATABASE=${DB_DATABASE}/g" /config/config.txt
-    sed -i "s/DB_USER=.*/DB_USER=${DB_USER}/g" /config/config.txt
-    sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${DB_PASSWORD}/g" /config/config.txt
+    [[ "${NODE_ENV}" ]] && sed -i "s/NODE_ENV=.*/NODE_ENV=${NODE_ENV}/g" /config/config.txt
+    [[ "${IS_CREATION_ENABLED}" ]] && sed -i "s/IS_CREATION_ENABLED=.*/IS_CREATION_ENABLED=${IS_CREATION_ENABLED}/g" /config/config.txt
+    [[ "${CONNECT_WITH_FRANZ}" ]] && sed -i "s/CONNECT_WITH_FRANZ=.*/CONNECT_WITH_FRANZ=${CONNECT_WITH_FRANZ}/g" /config/config.txt
+    [[ "${DB_CONNECTION}" ]] && sed -i "s/DB_CONNECTION=.*/DB_CONNECTION=${DB_CONNECTION}/g" /config/config.txt
+    [[ "${DB_HOST}" ]] && sed -i "s/DB_HOST=.*/DB_HOST=${DB_HOST}/g" /config/config.txt
+    [[ "${DB_PORT}" ]] && sed -i "s/DB_PORT=.*/DB_PORT=${DB_PORT}/g" /config/config.txt
+    [[ "${DB_DATABASE}" ]] && sed -i "s/DB_DATABASE=.*/DB_DATABASE=${DB_DATABASE}/g" /config/config.txt
+    [[ "${DB_USER}" ]] && sed -i "s/DB_USER=.*/DB_USER=${DB_USER}/g" /config/config.txt
+    [[ "${DB_PASSWORD}" ]] && sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${DB_PASSWORD}/g" /config/config.txt
 	rm /config/.env
     cp /config/config.txt /config/.env
 elif [ ! -f /config/config.txt ]; then
     echo " " 
     echo "**** Generating .env file ****"	
     cp /defaults/.env.example /config/.env
-	sed -i "s/NODE_ENV=.*/NODE_ENV=${NODE_ENV}/g" /config/.env
-	sed -i "s/IS_CREATION_ENABLED=.*/IS_CREATION_ENABLED=${IS_CREATION_ENABLED}/g" /config/.env
-	sed -i "s/CONNECT_WITH_FRANZ=.*/CONNECT_WITH_FRANZ=${CONNECT_WITH_FRANZ}/g" /config/.env
-	sed -i "s/DB_CONNECTION=.*/DB_CONNECTION=${DB_CONNECTION}/g" /config/.env
-	sed -i "s/DB_HOST=.*/DB_HOST=${DB_HOST}/g" /config/.env
-	sed -i "s/DB_PORT=.*/DB_PORT=${DB_PORT}/g" /config/.env
-	sed -i "s/DB_DATABASE=.*/DB_DATABASE=${DB_DATABASE}/g" /config/.env
-	sed -i "s/DB_USER=.*/DB_USER=${DB_USER}/g" /config/.env
-	sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${DB_PASSWORD}/g" /config/.env
+	[[ "${NODE_ENV}" ]] && sed -i "s/NODE_ENV=.*/NODE_ENV=${NODE_ENV}/g" /config/.env
+	[[ "${IS_CREATION_ENABLED}" ]] && sed -i "s/IS_CREATION_ENABLED=.*/IS_CREATION_ENABLED=${IS_CREATION_ENABLED}/g" /config/.env
+	[[ "${CONNECT_WITH_FRANZ}" ]] && sed -i "s/CONNECT_WITH_FRANZ=.*/CONNECT_WITH_FRANZ=${CONNECT_WITH_FRANZ}/g" /config/.env
+	[[ "${DB_CONNECTION}" ]] && sed -i "s/DB_CONNECTION=.*/DB_CONNECTION=${DB_CONNECTION}/g" /config/.env
+	[[ "${DB_HOST}" ]] && sed -i "s/DB_HOST=.*/DB_HOST=${DB_HOST}/g" /config/.env
+	[[ "${DB_PORT}" ]] && sed -i "s/DB_PORT=.*/DB_PORT=${DB_PORT}/g" /config/.env
+	[[ "${DB_DATABASE}" ]] && sed -i "s/DB_DATABASE=.*/DB_DATABASE=${DB_DATABASE}/g" /config/.env
+	[[ "${DB_USER}" ]] && sed -i "s/DB_USER=.*/DB_USER=${DB_USER}/g" /config/.env
+	[[ "${DB_PASSWORD}" ]] && sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${DB_PASSWORD}/g" /config/.env
 	cp /config/.env /config/config.txt
 fi
 
@@ -100,6 +100,7 @@ fi
 # check for the database endpoint for 30 seconds
 echo " "
 echo "**** Checking DB endpoint ****"
+source .env
 END=$((SECONDS+30))
 while [ ${SECONDS} -lt ${END} ] && [ "${DB_HOST} ${DB_PORT}" ];
 	do
