@@ -67,7 +67,7 @@ fi
 
 # update .env
 if [ -f /usr/src/app/.env ]; then
-	rm /usr/src/.env
+	rm /usr/src/app/.env
 	ln -s /config/.env /usr/src/app/.env
 elif [ ! -f /usr/src/app/.env ]; then
 	ln -s /config/.env /usr/src/app/.env
