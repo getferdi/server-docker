@@ -6,8 +6,8 @@ LABEL build_version="Ferdi-server-docker Build-date:- ${BUILD_DATE}"
 LABEL maintainer="xthursdayx"
 
 ARG FERDI_RELEASE
-ENV NODE_VERSION=10.16.3 
-ENV NPM_VERSION=6 
+ENV NODE_VERSION=10.16.3
+ENV NPM_VERSION=6.12.0
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2
 
 # install packages
