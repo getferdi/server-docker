@@ -14,6 +14,7 @@ ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2
 RUN \
   echo "**** installing build packages ****" && \
   apk add --no-cache \
+   libcap \
    libstdc++ \
    nano && \
   apk add --no-cache --virtual .build-deps \

@@ -151,8 +151,3 @@ chown -R abc:abc \
 
 # set lockfile to avoid DB waits for this specific container
 touch /dbwait.lock
-
-# start server
-echo " "
-echo "**** Starting Ferdi-server ****"
-adonis serve --dev
