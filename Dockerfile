@@ -6,8 +6,7 @@ LABEL build_version="Ferdi-server-docker Build-date:- ${BUILD_DATE}"
 LABEL maintainer="xthursdayx"
 
 ARG FERDI_RELEASE
-ENV NODE_VERSION=10.16.3
-ENV NPM_VERSION=6.12.0
+ENV NODE_VERSION=10.16.3 
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2
 
 # install packages
@@ -67,7 +66,8 @@ RUN \
   gnupg \
   tar && \
   echo "**** installing npm ****" && \
-  npm install -g npm@${NPM_VERSION} && \
+  npm config set unsafe-perm true && \
+  npm install -g npm@latest && \
   find /usr/lib/node_modules/npm -name test -o -name .bin -type d | xargs rm -rf && \
   echo "**** install ferdi server ****" && \
   mkdir -p /ferdi && \
@@ -76,13 +76,11 @@ RUN \
   apk del .build-deps-ferdi && \
   rm -rf \
    ${RM_DIRS} \
-   /node-${NODE_VERSION}* \
    /SHASUMS256.txt \
    /tmp/* \
    /var/cache/apk/* \
    /usr/share/man/* \
    /usr/share/doc \
-   /root/.npm \
    /root/.node-gyp \
    /root/.config \
    /usr/lib/node_modules/npm/man \
@@ -92,6 +90,8 @@ RUN \
   
 COPY root/ /
 
+USER root
+
 # ports and volumes
 EXPOSE 80 443
-VOLUME /usr/src/app/database /usr/src/app/recipes /config
+VOLUME /app/database /app/recipes /config

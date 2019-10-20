@@ -21,18 +21,15 @@ if [ -n "${TEST_RUN}" ]; then
 	echo '**** [services.d] done ****'
 fi
 
-# create directory structure
-mkdir -p /usr/src/app
-
 # install ferdi-server if necessary
 [[ -f /ferdi/ferdi.tar.gz ]] && \
  echo "**** Installing Ferdi-server ****" && \
  tar xf \
  	/ferdi/ferdi.tar.gz -C \
-	/usr/src/app --strip-components=1 && \
+	/app --strip-components=1 && \
  rm -rf \
     /ferdi && \
- chown -R abc:abc /usr/src/app	
+ chown -R abc:abc /app	
 
 # set ferdi-server status
 echo " "
@@ -66,26 +63,28 @@ elif [ ! -f /config/config.txt ]; then
 fi
 
 # update .env
-if [ -f /usr/src/app/.env ]; then
-	rm /usr/src/app/.env
-	ln -s /config/.env /usr/src/app/.env
-elif [ ! -f /usr/src/app/.env ]; then
-	ln -s /config/.env /usr/src/app/.env
+if [ -f /app/.env ]; then
+	rm /app/.env
+	ln -s /config/.env /app/.env
+elif [ ! -f /app/.env ]; then
+	ln -s /config/.env /app/.env
 fi
 
 # install adonisjs cli
 echo " "
 echo "**** Installing AdonisJS and deps ****"
-cd /usr/src/app
+cd /app
 echo " " 
+npm config set unsafe-perm true
 npm i -g @adonisjs/cli
 
 # install adonisjs dependencies
 npm install
+ln -s /usr/bin/adonis /bin/adonis
 
 # make custom recipe dir
-if [ ! -f /usr/src/app/recipes/dev ]; then
-mkdir -p /usr/src/app/recipes/dev
+if [ ! -f /app/recipes/dev ]; then
+mkdir -p /app/recipes/dev
 fi
 
 # setting the database helper
@@ -130,7 +129,7 @@ if [ ! -f "/config/FERDI_APP_KEY.txt" ];
 	then
 	echo " "
 	echo "**** Generating Ferdi-server app key for first run ****"
-    adonis key:generate
+	adonis key:generate
 	source .env
 	echo $APP_KEY > /config/FERDI_APP_KEY.txt
 	echo "**** App Key set to $APP_KEY you can modify FERDI_APP_KEY.txt to update your key ****"
@@ -147,7 +146,7 @@ fi
 # set permissions
 chown -R abc:abc \
 	/config \
-	/usr/src/app
+	/app
 
 # set lockfile to avoid DB waits for this specific container
 touch /dbwait.lock
