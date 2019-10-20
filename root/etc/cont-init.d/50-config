@@ -80,7 +80,6 @@ npm i -g @adonisjs/cli
 
 # install adonisjs dependencies
 npm install
-ln -s /usr/bin/adonis /bin/adonis
 
 # make custom recipe dir
 if [ ! -f /app/recipes/dev ]; then
