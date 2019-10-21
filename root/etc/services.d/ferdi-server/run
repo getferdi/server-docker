@@ -7,4 +7,4 @@ setcap 'cap_net_bind_service=+ep' `which node`
 # start server
 echo " "
 echo "**** Starting Ferdi-server ****"
-adonis serve --dev
+exec s6-setuidgid abc adonis serve --dev
