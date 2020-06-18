@@ -47,8 +47,8 @@ To create the docker container with the proper parameters:
 	  -e CONNECT_WITH_FRANZ=true \
 	  -p <port>:80 \
 	  -v <path to data>:/config \
-	  -v <path to database>:/usr/src/app/database \
-	  -v <path to recipes>:/usr/src/app/recipes \
+	  -v <path to database>:/app/database \
+	  -v <path to recipes>:/app/recipes \
 	  --restart unless-stopped \
 	  getferdi/ferdi-server
 
@@ -75,8 +75,8 @@ services:
       - CONNECT_WITH_FRANZ=true/false
     volumes:
       - <path to data>:/config
-      - <path to database>:/usr/src/app/database
-      - <path to recipes>:/usr/src/app/recipes
+      - <path to database>:/app/database
+      - <path to recipes>:/app/recipes
     ports:
       - <port>:80
     restart: unless-stopped
@@ -100,8 +100,8 @@ After the first run, Ferdi-server's configuration is saved inside the `config.tx
 | `-e IS_CREATION_ENABLED=true` | for specifying whether to enable the [creation of custom recipes](#creating-and-using-custom-recipes), default is true |
 | `-e CONNECT_WITH_FRANZ=true` | for specifying whether to enable connections to the Franz server, default is true |
 | `-v <path to data>:/config` | this will store persistent ENV  data on the docker host |
-| `-v <path to database>:/usr/src/app/database` | this will strore Ferdi-server's database on the docker host for persistence |
-| `-v <path to recipes>:/usr/src/app/recipes` | this will strore Ferdi-server's recipes on the docker host for persistence |
+| `-v <path to database>:/app/database` | this will strore Ferdi-server's database on the docker host for persistence |
+| `-v <path to recipes>:/app/recipes` | this will strore Ferdi-server's recipes on the docker host for persistence |
 	
 
 By enabling the `CONNECT_WITH_FRANZ` option, Ferdi-server can:
