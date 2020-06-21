@@ -16,8 +16,8 @@ A custom ferdi-server allows you to experience the full potential of the Ferdi c
 - [x] Workspace support
 - [x] Functioning service store
 - [x] User dashboard
-- [ ] Password recovery
-- [ ] Export/import data to other ferdi-servers
+- [x] Password recovery
+- [x] Export/import data to other ferdi-servers
 - [ ] Recipe update
 
 ## Installation & Setup
@@ -39,11 +39,19 @@ To create the docker container with the proper parameters:
 	  -e NODE_ENV=development \
 	  -e DB_CONNECTION=<database> \
 	  -e DB_HOST=<yourdbhost> \
-	  -e DB_PORT=<yourdbPORT> \
+	  -e DB_PORT=<yourdbport> \
 	  -e DB_USER=<yourdbuser> \
 	  -e DB_PASSWORD=<yourdbpass> \
 	  -e DB_DATABASE=<yourdbdatabase> \
+	  -e MAIL_CONNECTION=smtp \
+	  -e SMPT_HOST=<smtpmailserver> \
+	  -e SMTP_PORT=<smtpport> \
+	  -e MAIL_USERNAME=<yourmailusername> \
+	  -e MAIL_PASSWORD=<yourmailpassword> \
+	  -e MAIL_SENDER=<sendemailaddress> \
 	  -e IS_CREATION_ENABLED=true \
+	  -e IS_DASHBOARD_ENABLED=true \
+	  -e IS_REGISTRATION_ENABLED=true \
 	  -e CONNECT_WITH_FRANZ=true \
 	  -p <port>:80 \
 	  -v <path to data>:/config \
@@ -71,7 +79,15 @@ services:
       - DB_USER=<yourdbuser>
       - DB_PASSWORD=<yourdbpass>
       - DB_DATABASE=<yourdbdatabase>
+      - MAIL_CONNECTION=<mailsender>
+      - SMPT_HOST=<smtpmailserver>
+      - SMTP_PORT=<smtpport>
+      - MAIL_USERNAME=<yourmailusername>
+      - MAIL_PASSWORD=<yourmailpassword>
+      - MAIL_SENDER=<sendemailaddress>
       - IS_CREATION_ENABLED=true/false
+      - IS_DASHBOARD_ENABLED=true/false
+      - IS_REGISTRATION_ENABLED=true/false
       - CONNECT_WITH_FRANZ=true/false
     volumes:
       - <path to data>:/config
@@ -97,12 +113,19 @@ After the first run, Ferdi-server's configuration is saved inside the `config.tx
 | `-e DB_USER=<yourdbuser>` | for specifying the database user, default is root |
 | `-e DB_PASSWORD=<yourdbpass>` | for specifying the database password, default is password |
 | `-e DB_DATABASE=adonis` | for specifying the database to be used, adonis |
+| `-e MAIL_CONNECTION=<mailsender>` | for specifying the mail sender to be used, default is smtp |
+| `-e SMPT_HOST=<smtpmailserver>` | for specifying the mail host to be used, default is 127.0.0.1 |
+| `-e SMTP_PORT=<smtpport>` | for specifying the mail port to be used, default is 2525 |
+| `-e MAIL_USERNAME=<yourmailusername>` | for specifying your mail username to be used, default is username |
+| `-e MAIL_PASSWORD=<yourmailpassword>` | for specifying your mail password to be used, default is password |
+| `-e MAIL_SENDER=<sendemailaddress` | for specifying the mail sender address to be used, default is noreply@getferdi.com |
 | `-e IS_CREATION_ENABLED=true` | for specifying whether to enable the [creation of custom recipes](#creating-and-using-custom-recipes), default is true |
+| `-e IS_DASHBOARD_ENABLED=true` | for specifying whether to enable the Ferdi-server dashboard, default is true |
+| `-e IS_REGISTRATION_ENABLED=true` | for specifying whether to allow user registration, default is true |
 | `-e CONNECT_WITH_FRANZ=true` | for specifying whether to enable connections to the Franz server, default is true |
 | `-v <path to data>:/config` | this will store persistent ENV  data on the docker host |
 | `-v <path to database>:/app/database` | this will strore Ferdi-server's database on the docker host for persistence |
 | `-v <path to recipes>:/app/recipes` | this will strore Ferdi-server's recipes on the docker host for persistence |
-	
 
 By enabling the `CONNECT_WITH_FRANZ` option, Ferdi-server can:
     - Show the full Franz recipe library instead of only custom recipes
@@ -118,6 +141,17 @@ To use a different database than the default, SQLite, enter the driver code belo
 | MySQL | mysql |
 | PostgreSQL | pg |
 | SQLite3 | sqlite |
+
+## Supported mail connections (advanced)
+
+To use a different email sender than the default, SMTP, enter the correct information in your ENV configuration and adapt your docker run, create, or compose commands accordingly.
+
+| Mail Connection | ENV variables |
+| :----: | --- |
+| SMTP | SMTP_PORT, SMTP_HOST, MAIL_USERNAME, MAIL_PASSWORD |
+| SparkPost | SPARKPOST_API_KEY |
+| Mailgun | MAILGUN_DOMAIN, MAILGUN_API_REGION, MAILGUN_API_KEY |
+| Ethereal | A disposable account is created automatically if you choose this option. |
  
 ## NGINX config block
 To access Ferdi-server from outside of your home network on a subdomain use this server block:
@@ -145,6 +179,9 @@ server {
 Ferdi-server allows you to import your full Franz account, including all its settings.
 
 To import your Franz account, open `http://[YOUR FERDI-SERVER]/import` in your browser and login using your Franz account details. Ferdi-server will create a new user with the same credentials and copy your Franz settings, services and workspaces.
+
+## Transferring user data
+Please refer to <https://github.com/getferdi/ferdi/wiki/Transferring-data-between-servers>
 
 ## Creating and using custom recipes
 Ferdi-server allows to extends the Franz recipe catalogue with custom Ferdi recipes.
@@ -199,6 +236,7 @@ docker build \
 
 ## Versions
 
+* **21.06.20:** - Rebase to Alpine 3.11 and added Mailer settings.
 * **25.09.19:** - Initial Release.
 
 ## License
