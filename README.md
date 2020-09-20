@@ -37,6 +37,7 @@ To create the docker container with the proper parameters:
 	docker create \
 	  --name=ferdi-server \
 	  -e NODE_ENV=development \
+	  -e EXTERNAL_DOMAIN=<ferdi-serverdomain> \  
 	  -e DB_CONNECTION=<database> \
 	  -e DB_HOST=<yourdbhost> \
 	  -e DB_PORT=<yourdbport> \
@@ -46,6 +47,7 @@ To create the docker container with the proper parameters:
 	  -e MAIL_CONNECTION=smtp \
 	  -e SMPT_HOST=<smtpmailserver> \
 	  -e SMTP_PORT=<smtpport> \
+	  -e SSL=true/false \
 	  -e MAIL_USERNAME=<yourmailusername> \
 	  -e MAIL_PASSWORD=<yourmailpassword> \
 	  -e MAIL_SENDER=<sendemailaddress> \
@@ -73,6 +75,7 @@ services:
     container_name: ferdi-server
     environment:
       - NODE_ENV=development
+      - EXTERNAL_DOMAIN=<ferdi-serverdomain>	 
       - DB_CONNECTION=<database>
       - DB_HOST=<yourdbhost>
       - DB_PORT=<yourdbPORT>
@@ -82,6 +85,7 @@ services:
       - MAIL_CONNECTION=<mailsender>
       - SMPT_HOST=<smtpmailserver>
       - SMTP_PORT=<smtpport>
+      - SSL=true/false
       - MAIL_USERNAME=<yourmailusername>
       - MAIL_PASSWORD=<yourmailpassword>
       - MAIL_SENDER=<sendemailaddress>
@@ -107,6 +111,7 @@ After the first run, Ferdi-server's configuration is saved inside the `config.tx
 | :----: | --- |
 | `-p <port>:80` | will map the container's port 80 to a port on the host, default is 3333 |
 | `-e NODE_ENV=development` | for specifying Node environment, production or development, default is development |
+| `-e EXTERNAL_DOMAIN=<ferdi-serverdomain>` | for specifying external domain address of the ferdi server |
 | `-e DB_CONNECTION=sqlite` | for specifying the database being used, default is sqlite |
 | `-e DB_HOST=<yourdbhost>` | for specifying the database host, default is 127.0.0.1 |
 | `-e DB_PORT=<yourdbport>` | for specifying the database port, default is 3306 |
@@ -116,6 +121,7 @@ After the first run, Ferdi-server's configuration is saved inside the `config.tx
 | `-e MAIL_CONNECTION=<mailsender>` | for specifying the mail sender to be used, default is smtp |
 | `-e SMPT_HOST=<smtpmailserver>` | for specifying the mail host to be used, default is 127.0.0.1 |
 | `-e SMTP_PORT=<smtpport>` | for specifying the mail port to be used, default is 2525 |
+| `-e SSL=true/false` | for specifying SMTP mail secuirty, default is false |
 | `-e MAIL_USERNAME=<yourmailusername>` | for specifying your mail username to be used, default is username |
 | `-e MAIL_PASSWORD=<yourmailpassword>` | for specifying your mail password to be used, default is password |
 | `-e MAIL_SENDER=<sendemailaddress` | for specifying the mail sender address to be used, default is noreply@getferdi.com |
@@ -236,6 +242,7 @@ docker build \
 
 ## Versions
 
+* **20.09.20:** - Updated SMTP Mailer settings for password reset.
 * **21.06.20:** - Rebase to Alpine 3.11 and added Mailer settings.
 * **25.09.19:** - Initial Release.
 
