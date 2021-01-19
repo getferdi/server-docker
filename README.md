@@ -44,10 +44,11 @@ To create the docker container with the proper parameters:
 	  -e DB_USER=<yourdbuser> \
 	  -e DB_PASSWORD=<yourdbpass> \
 	  -e DB_DATABASE=<yourdbdatabase> \
+	  -e DB_SSL=false \
 	  -e MAIL_CONNECTION=smtp \
 	  -e SMPT_HOST=<smtpmailserver> \
 	  -e SMTP_PORT=<smtpport> \
-	  -e SSL=true/false \
+	  -e MAIL_SSL=true/false \
 	  -e MAIL_USERNAME=<yourmailusername> \
 	  -e MAIL_PASSWORD=<yourmailpassword> \
 	  -e MAIL_SENDER=<sendemailaddress> \
@@ -82,10 +83,11 @@ services:
       - DB_USER=<yourdbuser>
       - DB_PASSWORD=<yourdbpass>
       - DB_DATABASE=<yourdbdatabase>
+      - DB_SSL=true/false
       - MAIL_CONNECTION=<mailsender>
       - SMPT_HOST=<smtpmailserver>
       - SMTP_PORT=<smtpport>
-      - SSL=true/false
+      - MAIL_SSL=true/false
       - MAIL_USERNAME=<yourmailusername>
       - MAIL_PASSWORD=<yourmailpassword>
       - MAIL_SENDER=<sendemailaddress>
@@ -118,10 +120,11 @@ After the first run, Ferdi-server's configuration is saved inside the `config.tx
 | `-e DB_USER=<yourdbuser>` | for specifying the database user, default is root |
 | `-e DB_PASSWORD=<yourdbpass>` | for specifying the database password, default is password |
 | `-e DB_DATABASE=adonis` | for specifying the database to be used, adonis |
+| `-e DB_SSL=false` | for specifying whether the database is accessed via ssl |
 | `-e MAIL_CONNECTION=<mailsender>` | for specifying the mail sender to be used, default is smtp |
 | `-e SMPT_HOST=<smtpmailserver>` | for specifying the mail host to be used, default is 127.0.0.1 |
 | `-e SMTP_PORT=<smtpport>` | for specifying the mail port to be used, default is 2525 |
-| `-e SSL=true/false` | for specifying SMTP mail secuirty, default is false |
+| `-e MAIL_SSL=true/false` | for specifying SMTP mail secuirty, default is false |
 | `-e MAIL_USERNAME=<yourmailusername>` | for specifying your mail username to be used, default is username |
 | `-e MAIL_PASSWORD=<yourmailpassword>` | for specifying your mail password to be used, default is password |
 | `-e MAIL_SENDER=<sendemailaddress` | for specifying the mail sender address to be used, default is noreply@getferdi.com |
@@ -154,7 +157,7 @@ To use a different email sender than the default, SMTP, enter the correct inform
 
 | Mail Connection | ENV variables |
 | :----: | --- |
-| SMTP | SMTP_PORT, SMTP_HOST, MAIL_USERNAME, MAIL_PASSWORD |
+| SMTP | SMTP_PORT, SMTP_HOST, MAIL_USERNAME, MAIL_PASSWORD, MAIL_SSL |
 | SparkPost | SPARKPOST_API_KEY |
 | Mailgun | MAILGUN_DOMAIN, MAILGUN_API_REGION, MAILGUN_API_KEY |
 | Ethereal | A disposable account is created automatically if you choose this option. |
@@ -242,6 +245,7 @@ docker build \
 
 ## Versions
 
+* **19.01.21:** - Updated Mail SSL and DB SLL settings
 * **20.09.20:** - Updated SMTP Mailer settings for password reset.
 * **21.06.20:** - Rebase to Alpine 3.11 and added Mailer settings.
 * **25.09.19:** - Initial Release.
