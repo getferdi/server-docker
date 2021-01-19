@@ -13,6 +13,7 @@ DB_PORT=${DB_PORT}\\n\
 DB_USER=${DB_USER}\\n\
 DB_PASSWORD=${DB_PASSWORD}\\n\
 DB_DATABASE=${DB_DATABASE}\\n\
+DB_SSL=${DB_SSL}\\n\
 IS_CREATION_ENABLED=${IS_CREATION_ENABLED}\\n\
 IS_DASHBOARD_ENABLED=${IS_DASHBOARD_ENABLED}\\n\
 IS_REGISTRATION_ENABLED=${IS_REGISTRATION_ENABLED}\\n\
@@ -20,7 +21,7 @@ CONNECT_WITH_FRANZ=${CONNECT_WITH_FRANZ}\\n\
 MAIL_CONNECTION=${MAIL_CONNECTION}\\n\
 SMTP_PORT=${SMTP_PORT}\\n\
 SMTP_HOST=${SMTP_HOST}\\n\
-SSL=${SSL}\\n\
+MAIL_SSL=${MAIL_SSL}\\n\
 MAIL_USERNAME=${MAIL_USERNAME}\\n\
 MAIL_PASSWORD=${MAIL_PASSWORD}\\n\
 MAIL_SENDER=${MAIL_SENDER}\\n"
@@ -57,10 +58,11 @@ if [ -f /config/config.txt ]; then
     [[ "${DB_DATABASE}" ]] && sed -i "s/DB_DATABASE=.*/DB_DATABASE=${DB_DATABASE}/g" /config/config.txt
     [[ "${DB_USER}" ]] && sed -i "s/DB_USER=.*/DB_USER=${DB_USER}/g" /config/config.txt
     [[ "${DB_PASSWORD}" ]] && sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${DB_PASSWORD}/g" /config/config.txt
+    [[ "${DB_SSL}" ]] && sed -i "s/DB_SSL=.*/DB_SSL=${DB_SSL}/g" /config/config.txt
     [[ "${MAIL_CONNECTION}" ]] && sed -i "s/MAIL_CONNECTION=.*/MAIL_CONNECTION=${MAIL_CONNECTION}/g" /config/config.txt	
     [[ "${SMTP_HOST}" ]] && sed -i "s/SMTP_HOST=.*/SMTP_HOST=${SMTP_HOST}/g" /config/config.txt
     [[ "${SMTP_PORT}" ]] && sed -i "s/SMTP_PORT=.*/SMTP_PORT=${SMTP_PORT}/g" /config/config.txt
-    [[ "${SSL}" ]] && sed -i "s/SSL=.*/SSL=${SSL}/g" /config/config.txt
+    [[ "${MAIL_SSL}" ]] && sed -i "s/MAIL_SSL=.*/MAIL_SSL=${MAIL_SSL}/g" /config/config.txt
     [[ "${MAIL_USERNAME}" ]] && sed -i "s/MAIL_USERNAME=.*/MAIL_USERNAME=${MAIL_USERNAME}/g" /config/config.txt
     [[ "${MAIL_PASSWORD}" ]] && sed -i "s/MAIL_PASSWORD=.*/MAIL_PASSWORD=${MAIL_PASSWORD}/g" /config/config.txt
     [[ "${MMAIL_SENDER}" ]] && sed -i "s/MAIL_SENDER=.*/MAIL_SENDER=${MAIL_SENDER}/g" /config/config.txt
@@ -82,10 +84,11 @@ elif [ ! -f /config/config.txt ]; then
     [[ "${DB_DATABASE}" ]] && sed -i "s/DB_DATABASE=.*/DB_DATABASE=${DB_DATABASE}/g" /config/.env
     [[ "${DB_USER}" ]] && sed -i "s/DB_USER=.*/DB_USER=${DB_USER}/g" /config/.env
     [[ "${DB_PASSWORD}" ]] && sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${DB_PASSWORD}/g" /config/.env
+    [[ "${DB_SSL}" ]] && sed -i "s/DB_SSL=.*/DB_SSL=${DB_SSL}/g" /config/.env
     [[ "${MAIL_CONNECTION}" ]] && sed -i "s/MAIL_CONNECTION=.*/MAIL_CONNECTION=${MAIL_CONNECTION}/g" /config/.env	
     [[ "${SMTP_HOST}" ]] && sed -i "s/SMTP_HOST=.*/SMTP_HOST=${SMTP_HOST}/g" /config/.env
     [[ "${SMTP_PORT}" ]] && sed -i "s/SMTP_PORT=.*/SMTP_PORT=${SMTP_PORT}/g" /config/.env
-    [[ "${SSL}" ]] && sed -i "s/SSL=.*/SSL=${SSL}/g" /config/.env
+    [[ "${MAIL_SSL}" ]] && sed -i "s/MAIL_SSL=.*/MAIL_SSL=${MAIL_SSL}/g" /config/.env
     [[ "${MAIL_USERNAME}" ]] && sed -i "s/MAIL_USERNAME=.*/MAIL_USERNAME=${MAIL_USERNAME}/g" /config/.env
     [[ "${MAIL_PASSWORD}" ]] && sed -i "s/MAIL_PASSWORD=.*/MAIL_PASSWORD=${MAIL_PASSWORD}/g" /config/.env
     [[ "${MMAIL_SENDER}" ]] && sed -i "s/MAIL_SENDER=.*/MAIL_SENDER=${MAIL_SENDER}/g" /config/.env
