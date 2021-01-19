@@ -120,7 +120,7 @@ After the first run, Ferdi-server's configuration is saved inside the `config.tx
 | `-e DB_USER=<yourdbuser>` | for specifying the database user, default is root |
 | `-e DB_PASSWORD=<yourdbpass>` | for specifying the database password, default is password |
 | `-e DB_DATABASE=adonis` | for specifying the database to be used, adonis |
-| `-e DB_SSL=false` | for specifying whether the database is accessed via ssl |
+| `-e DB_SSL=false` | true only if your database is postgres and it is hosted online on platforms like GCP, AWS, etc |
 | `-e MAIL_CONNECTION=<mailsender>` | for specifying the mail sender to be used, default is smtp |
 | `-e SMPT_HOST=<smtpmailserver>` | for specifying the mail host to be used, default is 127.0.0.1 |
 | `-e SMTP_PORT=<smtpport>` | for specifying the mail port to be used, default is 2525 |
