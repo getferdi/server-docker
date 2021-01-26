@@ -25,7 +25,7 @@ RUN ["apk", "add", "--no-cache", "sqlite-libs", "curl"]
 COPY --from=build /code /app
 RUN ["touch", ".env"]
 
-HEALTHCHECK CMD curl -sSf http://localhost:${HOST}/health
+HEALTHCHECK CMD curl -sSf http://localhost:${PORT}/health
 
 COPY entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
