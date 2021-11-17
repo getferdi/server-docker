@@ -1,3 +1,35 @@
+## ** UPDATE 2021-11-17 **
+
+The Ferdi-server docker image has now been integrated into the default [Ferdi-server repository](https://github.com/getferdi/server).
+
+Existing users, please note: The latest updates to Ferdi-server and the Ferdi-server Docker image introduce changes to the default SQLite database name and location, as well as the internal container port. The new container port is 3333. If you would like to keep your existing SQLite database, you will need to add the DATA_DIR variable and change it to /app/database, to match your existing data volume. You will also need to change the DB_DATABASE variable to development to match your existing database. Please see the parameters in the Migration section below.
+
+## Migrating from an existing Ferdi-server
+
+If you are an existing Ferdi-server user using the built-in `SQlite` database, you should include the following variables:
+| Parameter | Function |
+| :----: | --- |
+| `-p 3333:3333` | existing Ferdi-server users will need to update their container port mappings from `80:3333` to `3333:3333` |
+| `-e DB_PASSWORD=development` | existing Ferdi-server users who use the built-in sqlite database should use the database name `development` |
+| `-e DATA_DIR=/app/database` | existing Ferdi-server users who use the built-in sqlite database should add this environmental variable to ensure data persistence |
+| `-v <path to data on host>=/app/databases` | existing Ferdi-server users who use the built-in sqlite database should use the volume name `/app/database` |
+
+If you are an existing Ferdi-server user who uses an external database or different variables for the built-in `SQlite` database, you should updatae your parameterse acordingly. For example, if you aree using an exterenal MariaDB or MySql  database your unique parameters might look like this:
+| Parameter | Function |
+| :----: | --- |
+| `-e DB_CONNECTION=mysql` | for specifying the database being used |
+| `-e DB_HOST=192.168.10.1` | for specifying the database host machine IP |
+| `-e DB_PORT=3306` | for specifying the database port |
+| `-e DB_USER=ferdi` | for specifying the database user |
+| `-e DB_PASSWORD=ferdipw` | for specifying the database password|
+| `-e DB_DATABASE=adonis` | for specifying the database to be used|
+| `-v <path to database>:/app/database` | this will strore Ferdi-server's database on the docker host for persistence |
+| `-v <path to recipes>:/app/recipes` | this will strore Ferdi-server's recipes on the docker host for persistence |
+
+**In either case, please be sure to pass the correct variables to the new Ferdi-server container in order maintain access to your existing database.** 
+
+For more information please check out the [Docker folder on in the Ferdi-server repository](https://github.com/getferdi/server/tree/master/docker).
+
 <p align="center">
     <img src="./logo.png" alt="" width="300"/>  
 </p>
